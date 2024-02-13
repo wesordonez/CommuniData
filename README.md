@@ -47,8 +47,26 @@ pip install -r requirements.txt
 
 ### Configuring PostgreSQL and PGAdmin4
 
-Create a new PostgreSQL database for CommuniData
+Create a new PostgreSQL database for CommuniData and update the settings.py file:
+
+'''python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'yourdatabasename',
+        'USER': 'yourdatabaseuser',
+        'PASSWORD': 'yourdatabasepassword',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+'''
+
 Apply the Django database migrations
+
+'''python
+python manage.py migrate
+'''
 
 ## Usage
 
@@ -59,6 +77,14 @@ You can now access the web interface at
 'http://127.0.0.1:8000/'
 or 
 'localhost:8000/'
+
+### Creating a Superuser
+
+Create an admin user for accessing the Django admin interface:
+
+'''python
+python manage.py createsuperuser
+'''
 
 ## Contact
 
