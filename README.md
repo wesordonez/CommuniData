@@ -28,7 +28,10 @@ Before you begin, ensure you have the following installed:
 ### Clone the Repo
 
 Clone the repo to your local machine
-https://github.com/wesordonez/CommuniData.git 
+
+'''bash
+git clone https://github.com/wesordonez/CommuniData.git 
+'''
 
 ### Activate the Virtual Environment
 
@@ -38,7 +41,9 @@ It's recommended to use a virtual environment for Python projects to manages dep
 
 Install all required Python packages specified in the 'requirements.txt' file:
 
+'''python
 pip install -r requirements.txt
+'''
 
 ### Configuring PostgreSQL and PGAdmin4
 
