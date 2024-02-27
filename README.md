@@ -92,3 +92,4 @@ python manage.py createsuperuser
 - GitHub: [wesordonez](https://github.com/wesordonez)
 - Collaborators: Benjamin Quezada, Cesar Ordonez
 - Test
+- Esto y lo otro
