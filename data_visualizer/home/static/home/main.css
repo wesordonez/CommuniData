@@ -82,7 +82,10 @@ body {
 .site-header {
     background-color: #B3DDF2;
 }
-
+.navbar-container {
+    padding: 10px;
+    margin: auto 10px;
+}
 img {
   width: 120px; 
   height: auto; 
