@@ -91,5 +91,3 @@ python manage.py createsuperuser
 - Email: wesordonez1@gmail.com
 - GitHub: [wesordonez](https://github.com/wesordonez)
 - Collaborators: Benjamin Quezada, Cesar Ordonez
-- Test
-- Esto y lo otro

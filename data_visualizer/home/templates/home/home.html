@@ -11,25 +11,31 @@
     
     <!-- Custom CSS link -->
     <link rel="stylesheet" href="{% static 'home/main.css' %}">
-    
-    <title>Chicago Business Data Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">    
+
 </head>
 <body>
     <header class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <nav class="navbar navbar-expand-md bg-steel fixed-top">
             <div class="container">
-                <a class="navbar-brand mr-4" href="{% url 'home' %}">Chicago Business Data Dashboard</a>
+                <a class="navbar-brand mr-4" href="{% url 'home' %}">  <img class = "logo" src="{% static 'home/CD_Logo.jpeg'%}" alt="CommuniData Logo"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
                     <div class="navbar-nav mr-auto">
-                        <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
+                        <a class="nav-item nav-link header-link" href="{% url 'home' %}">What are they saying?</a>
+                        <a class="nav-item nav-link header-link" href="{% url 'home' %}">How's it work?</a>
+                        <a class="nav-item nav-link header-link" href="{% url 'home' %}">Who are we?</a>
                     </div>
                     <!-- Navbar Right Side -->
                     <div class="navbar-nav">
-                        <a class="nav-item nav-link" href="">Register</a>
-                        <a class="nav-item nav-link" href="">Log In</a>
+                        <a class="nav-item nav-link header-link" href="">Register</a>
+                        <a class="nav-item nav-link header-link" href="">Log In</a>
                     </div>
                 </div>
             </div>
