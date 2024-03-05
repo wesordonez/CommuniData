@@ -93,10 +93,17 @@ img {
   font-weight: 900;
 }
 
-.header-link:hover {
-  color: #ffffff;
+.header-link:hover .star-indicator {
+  color: #FF4747;
+  display: inline-block;
 }
 
-.header-link.active {
+/* .header-link.active {
   font-weight: 500;
+  .star-indicator {
+    display: inline;
+  }
+} */
+.header-link .star-indicator {
+  display: none;
 }
