@@ -101,12 +101,16 @@ img {
   display: inline-block;
 }
 
-/* .header-link.active {
-  font-weight: 500;
-  .star-indicator {
-    display: inline;
-  }
-} */
 .header-link .star-indicator {
   display: none;
+}
+
+.login-star-indicator {
+  color: #FF4747;
+  padding: 10px;
+}
+
+.login-button {
+  padding: 10px;
+  margin: 10px;
 }
