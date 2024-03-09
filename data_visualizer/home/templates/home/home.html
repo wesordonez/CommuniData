@@ -11,25 +11,50 @@
     
     <!-- Custom CSS link -->
     <link rel="stylesheet" href="{% static 'home/main.css' %}">
-    
-    <title>Chicago Business Data Dashboard</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">    
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/9451864d27.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
     <header class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-            <div class="container">
-                <a class="navbar-brand mr-4" href="{% url 'home' %}">Chicago Business Data Dashboard</a>
+        <nav class="navbar navbar-expand-md bg-steel fixed-top">
+            <div class="container navbar-container">
+                <a class="navbar-brand mr-4" href="{% url 'home' %}">  <img class = "logo" src="{% static 'home/CD_Logo.jpeg'%}" alt="CommuniData Logo"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
-                    <div class="navbar-nav mr-auto">
-                        <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
+                    <div class="d-flex w-100">
+                    <!-- Navbar Left Side -->
+                        <div class="navbar-nav mr-auto align-items-center">
+                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#section1">
+                                <i class="fa-solid fa-star star-indicator"></i>
+                                What are they saying?
+                                <i class="fa-solid fa-star star-indicator"></i>
+                            </a>
+                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#section2">
+                                <i class="fa-solid fa-star star-indicator"></i>
+                                How's it work?
+                                <i class="fa-solid fa-star star-indicator"></i>
+                            </a>
+                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#section3">
+                                <i class="fa-solid fa-star star-indicator"></i>
+                                Who are we?
+                                <i class="fa-solid fa-star star-indicator"></i>
+                            </a>
+                        </div>
                     </div>
                     <!-- Navbar Right Side -->
-                    <div class="navbar-nav">
-                        <a class="nav-item nav-link" href="">Register</a>
-                        <a class="nav-item nav-link" href="">Log In</a>
+                    <div class="navbar-nav ml-auto align-items-center">
+                        <i class="fa-solid fa-star login-star-indicator"></i>
+                        <button type="button" class="btn btn-light login-button">Log in!</button>
+                        <i class="fa-solid fa-star login-star-indicator"></i>
                     </div>
                 </div>
             </div>
