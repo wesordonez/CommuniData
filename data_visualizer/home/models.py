@@ -44,14 +44,14 @@ class Consultant(models.Model):
         
     """
 
-    consultantId = models.AutoField(primary_key=True)
+    consultant_id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=MAX_CHAR_LENGTH)
     last_name = models.CharField(max_length=MAX_CHAR_LENGTH)
     slug = models.SlugField(max_length=MAX_CHAR_LENGTH * 2, unique=True, blank=True, null=True)
     email = models.EmailField(unique=True, max_length=MAX_CHAR_LENGTH)
     phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
     specialty = models.CharField(choices=SPECIALTY_CHOICES, max_length=2)
-    bip_id = models.IntegerField()
+    bip_id = models.ForeignKey('BusinessInitiativeProgram', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'consultants'
@@ -74,4 +74,31 @@ class Consultant(models.Model):
             self.slug = f"{self.first_name}-{self.last_name}-{self.bip_id}"
         super(Consultant, self).save(*args, **kwargs)
             
-    
+
+class BusinessInitiativeProgram(models.Model):
+    """Business Initiative Program (BIP) data model.
+
+    Args:
+        models (module): The Django models module.
+        bipId (int, optional): The ID of the BIP. Defaults to models.AutoField(primary_key=True).
+
+    Attributes:
+        bipId (int): The ID of the BIP and Primary Key of the table.
+        name (str): The name of the BIP.
+        deliverables (str): The deliverables of the BIP.
+        start_date (Date): The start date of the BIP.
+        end_date (Date): The end date of the BIP.
+        contact (str): The contact person for the BIP.
+        
+    """
+
+    bip_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=MAX_CHAR_LENGTH)
+    deliverables = models.TextField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+    contact = models.CharField(max_length=MAX_CHAR_LENGTH)
+
+    class Meta:
+        db_table = 'bips'
+        
