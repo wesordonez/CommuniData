@@ -41,3 +41,38 @@ class Review(models.Model):
     class Meta:
         db_table = 'reviews'
        
+
+class ContactSubmission(models.Model):
+    """Contact submission data model.
+
+    Args:
+        models (module): The Django models module.
+
+    Attributes:
+        contact_id (AutoField): The ID of the contact submission and Primary Key of the table.
+        name (CharField): The name of the contact.
+        email (EmailField): The email of the contact.
+        phone (CharField): The phone number of the contact.
+        message (TextField): The message from the contact.
+
+    """
+    
+    contact_submission_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=MAX_CHAR_LENGTH)
+    email = models.EmailField()
+    phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
+    message = models.TextField()
+    
+    class Meta:
+        db_table = 'contact_submissions'
+        constraints = [
+            CheckConstraint(
+                check=Q(phone__isnull=False) | Q(email__isnull=False),
+                name='phone_or_email_required'
+            ),
+            UniqueConstraint(
+                fields=['email', 'phone'],
+                name='unique_contact'
+            )
+        ]
+        
