@@ -38,3 +38,6 @@ class Review(models.Model):
     message = models.TextField()
     stars = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
    
+    class Meta:
+        db_table = 'reviews'
+       
