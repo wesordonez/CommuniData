@@ -11,7 +11,7 @@
     
     <!-- Project links -->
     <link rel="stylesheet" href="{% static 'home/css/main.css' %}">
-    <script type="text/javascript" src="{% static 'home/js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'home/js/script.js' %}"></script>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,34 +80,67 @@
         </div>
     </section>
 
-    <section class="reviews">
-        <h2>Reviews</h2>
-        <div class="review">
-            <h3>Review 1</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc id aliquam ultricies, nisl justo commodo nunc, nec tincidunt nunc nunc id mauris.</p>
-        </div>
-        <div class="review">
-            <h3>Review 2</h3>
-            <p>Curabitur euismod, mauris ut lacinia tincidunt, mi nunc aliquet nunc, nec tincidunt nunc nunc id mauris.</p>
-        </div>
-        <div class="review">
-            <h3>Review 3</h3>
-            <p>Etiam euismod, mauris ut lacinia tincidunt, mi nunc aliquet nunc, nec tincidunt nunc nunc id mauris.</p>
-        </div>
-    </section>
+    <!-- Reviews and Partners Section -->
 
-    <section class="logos">
-        <h2>Our Partners</h2>
-        <div class="logo">
-            <img src="company1.png" alt="Company 1">
-        </div>
-        <div class="logo">
-            <img src="company2.png" alt="Company 2">
-        </div>
-        <div class="logo">
-            <img src="company3.png" alt="Company 3">
+    <section class="collapsible-section">
+        <button class="collapsible-button">What are they saying?</button>
+        <div class="content">
+            <div class="reviews">
+                <!-- Insert review content here -->
+                <div class="review-card">
+                    <button class="btn btn-primary review-btn">HUMBOLDT PARK</button>
+                    <h3>“ Exporting reports from CommuniData is a breeze, which makes our grant writing and reporting process so much more efficient. 
+                        It’s not just a time-saver; it’s a lifesaver!”</h3>
+                    <p>-
+                        Malcom Crawford
+                        CEO at AAABNA</p>
+                </div>
+                <div class="review-card">
+                    <button class="btn btn-primary review-btn">ENGLEWOOD</button>
+                    <h3>“ I’ve been blown away by how much easier it is to track the growth and challenges within our community 
+                        since we started using CommuniData. It’s like having a bird’s-eye view of where we stand and where we can 
+                        improve.”</h3>
+                    <p>-
+                        Felicia Slaton
+                        Executive Director at GEChamber</p>
+                </div>
+                <div class="review-card">
+                    <button class="btn btn-primary review-btn">SOUL CITY</button>
+                    <h3>“ This platform is phenomenal for getting a clear picture of economic health in our community. 
+                        Visualizing the data makes complex information easy to understand and act upon. 
+                        A must-have tool for any community-focused organization! ”</h3>
+                    <p>-
+                        Honorio Torres
+                        Director of Business Initiatives at PRCC</p>
+                </div>
+            </div>
+            <div class="partners">
+                <h2>Data Sources and Partners</h2>
+                <div class="partner-logos">
+                    <!-- Insert partner logos here -->
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/gec-logo.png' %}" alt="Company 1">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/prcc-logo.png' %}" alt="Company 2">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/aaabna-logo.png' %}" alt="Company 3">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/chi-logo.png' %}" alt="Company 4">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/cdp-logo.png' %}" alt="Company 5">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/wbc-logo.png' %}" alt="Company 6">
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
+      
 
     <section class="call-to-action">
         <h2>Call to Action</h2>

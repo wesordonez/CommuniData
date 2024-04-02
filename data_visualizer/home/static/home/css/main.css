@@ -195,3 +195,133 @@ img {
     margin-bottom: 20px;
   }
 }
+
+
+/* Reviews/Partners Section Styles */
+
+.collapsible-section {
+  margin: 0 auto;
+  width: 98%;
+  text-align: center;
+}
+
+.collapsible-section .collapsible-button {
+  background-color: #083D77; 
+  color: white;
+  padding: 18px;
+  font-size: 1.5em;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  width: 50%;
+  align-items: center;
+  text-transform: bold;
+  margin-bottom: 0; /* Remove extra space */
+}
+
+.active, .collapsible-button:hover {
+  background-color: #003d82; /* Darken button on active/hover */
+}
+
+.content {
+  padding: 30px;
+  border-radius: 45px;
+  display: none;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #083D77;
+  text-align: center;
+}
+
+.reviews {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.review-card {
+  background-color: #083D77;
+  color: #B3DDF2;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 5px;
+  display: inline-block;
+  vertical-align: top;
+  flex: 1 0 30%;
+  max-width: 30%;
+}
+
+.review-card h3 {
+  color: #B3DDF2;
+  font-size: 1.5em;
+  font-weight: 300;
+  padding: 30px;
+  margin-top: 0;
+  border-radius: 4px 4px 0 0; /* Only round the top corners */
+}
+
+.review-card p {
+  color: #B3DDF2;
+  font-size: 1.1em;
+  font-weight: 100;
+  margin-bottom: 0;
+}
+
+.review-btn {
+  background-color: #01735C;
+  border-color: white;
+  border-width: 5px;
+  color: white;
+  font-weight: 500;
+  padding: 10px 20px;
+  font-size: 1em; /* Example size, adjust as needed */
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.partners {
+  margin-top: 20px; /* Spacing between testimonials and logos */
+  padding: 30px;
+  background-color: white;
+  border-radius: 45px;
+}
+
+.partner-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.partner-logo {
+  display: inline-block;
+  margin: 10px;
+  background-color: white; /* Logos likely need to stand out against dark background */
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.partner-logo img {
+  max-width: 200px; /* Or whatever size fits your design */
+  width: auto;
+  height: auto;
+}
+
+/* Title for Data Sources and Partners */
+.partners h2 {
+  font-size: 1.5em;
+  color: #083D77;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+/* You may want to add responsiveness */
+@media (max-width: 768px) {
+  .testimonial-card {
+    width: 100%; /* Stack on small screens */
+    margin: 20px 0; /* Adjust margins for stacking */
+  }
+}
+
+/* Style the reviews and partners sections to your liking */
