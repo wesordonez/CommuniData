@@ -10,6 +10,7 @@ body {
     background: #fafafa;
     color: #333333;
     padding-top: 180px;
+    font-family: Raleway, sans-serif;
   }
   
   ul {
@@ -111,6 +112,86 @@ img {
 }
 
 .login-button {
+  padding: 10px 20px;
+  font-size: 1em; /* Example size, adjust as needed */
   width: 100px;
-  padding: 5px;
+  border-radius: 50px;
+  color: #083D77;
+}
+
+/* Landing Page Styles */
+
+/* Hero Section Styles */
+
+.hero-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px;
+}
+
+.hero-content {
+  max-width: 50%;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 2.5em; /* Example size, adjust as needed */
+  font-weight: 800;
+  color: #083D77;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 1.1em; /* Example size, adjust as needed */
+  font-weight: 500;
+  color: #083D77;
+  margin-bottom: 30px;
+}
+
+.hero-cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.cta-button {
+  padding: 10px 20px;
+  font-size: 1em; /* Example size, adjust as needed */
+  color: white;
+  background-color: #083D77;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.hero-content .login-button {
+  border-color: #083D77;
+}
+
+.cta-button:hover {
+  background-color: #FF4747; /* Darken button on hover */
+}
+
+.hero-image {
+  max-width: 45%;
+}
+
+.hero-image img {
+  width: 100%; /* Make image responsive */
+  height: auto;
+  border-radius: 5%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column;
+  }
+
+  .hero-content,
+  .hero-image {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
 }
