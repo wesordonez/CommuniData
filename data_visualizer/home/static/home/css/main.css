@@ -447,3 +447,40 @@ img {
   background-color: #FF4747; /* Slightly darker on hover */
 }
 
+
+/* Footer Styles */
+
+.site-footer {
+  background-color: #B3DDF2; /* Dark blue background */
+  color: #083D77; /* Light text for contrast */
+  padding: 0 20px; /* Padding around the footer */
+  text-align: center; /* Centered text */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between; /* Space out the content */
+  align-items: center; /* Align items vertically */
+  flex-wrap: wrap; /* Wrap content on smaller screens */
+}
+
+.footer-logo {
+  width: 100px; /* Adjust size as needed */
+  height: auto; /* Maintain aspect ratio */
+  margin-bottom: 20px; /* Spacing under the logo */
+}
+
+.social-media {
+  flex: 1; /* Take up one-third of the space */
+  margin-bottom: 20px; /* Spacing under the links */
+}
+
+.social-media i {
+  font-size: 1.5em; /* Adjust size as needed */
+  margin: 0 10px; /* Spacing between icons */
+}
+
+.footer-contact {
+  flex: 1; /* Take up one-third of the space */
+  margin-bottom: 20px; /* Spacing under the contact information */
+}
