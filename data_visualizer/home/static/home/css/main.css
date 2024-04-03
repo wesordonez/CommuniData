@@ -166,6 +166,7 @@ img {
 }
 
 .hero-content .login-button {
+  padding: 10px 20px;
   border-color: #083D77;
 }
 
@@ -379,5 +380,70 @@ img {
   .feature-image {
     order: -1; /* Image comes before text */
   }
+}
+
+
+/* Call to Action and Contact Form Section Styles */
+
+.cta-section {
+  background-image: linear-gradient(to bottom, #fafafa, #b3ddf2); /* Vertical gradient from white to light blue */
+  text-align: center; /* Centered text */
+  padding: 50px 20px; /* Padding around the section */
+  color: #083D77; /* Dark text for contrast */
+}
+
+.cta-section h2 {
+  font-size: 2em; /* Large font size for the heading */
+  font-weight: 500;
+  margin-bottom: 30px; /* Spacing under the heading */
+}
+
+.cta-section .cta-button {
+  background-color: #083D77; /* Dark blue background */
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 50px; /* Rounded edges */
+  font-size: 1.5em;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.cta-button:hover {
+  background-color: #FF4747; /* Slightly darker on hover */
+}
+
+.intro-text {
+  margin-bottom: 30px; /* Spacing under the introductory text */
+}
+
+.contact-form {
+  max-width: 500px; /* Set a max-width for the form */
+  margin: auto; /* Center the form */
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%; /* Full width */
+  padding: 10px; /* Padding inside inputs */
+  margin-bottom: 20px; /* Spacing under inputs */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 20px; /* Rounded edges for inputs */
+}
+
+.contact-form .submit-button {
+  background-color: #083D77; /* Dark blue background */
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 50px; /* Rounded edges */
+  font-size: 1em;
+  cursor: pointer;
+  width: 50%; /* Full width */
+  box-sizing: border-box; /* Border included in width */
+}
+
+.contact-form .submit-button:hover {
+  background-color: #FF4747; /* Slightly darker on hover */
 }
 
