@@ -324,4 +324,60 @@ img {
   }
 }
 
-/* Style the reviews and partners sections to your liking */
+/* Features Section Styles */
+
+.features-section {
+  max-width: 1200px; /* Max width of the section */
+  margin: 40px auto; /* Center the section */
+  padding: 40px 0; /* Top and bottom padding */
+}
+
+.feature-row {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  margin-bottom: 20px; /* Space between feature rows */
+  flex-wrap: wrap; /* Ensure responsiveness */
+}
+
+.feature-text, .feature-image {
+  flex: 1; /* Each takes up half the width of the container */
+  padding: 20px; /* Padding around text and images */
+  color: #083D77; /* Text color */
+}
+
+.feature-text h3 {
+  font-weight: 500;
+  margin-bottom: 15px; /* Space below the title */
+}
+
+.feature-text p {
+  font-weight: 100;
+  line-height: 1.6; /* Line height for paragraph */
+}
+
+.feature-image {
+  text-align: center; /* Center the image */
+}
+
+.feature-image img {
+  max-width: 100%; /* Ensures the image is responsive */
+  width: 50%;
+  border-radius: 10px;
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+  .feature-row {
+    flex-direction: column; /* Stack elements on top of each other */
+  }
+
+  .feature-text, .feature-image {
+    flex-basis: 100%; /* Each takes up the full width */
+  }
+
+  .feature-image {
+    order: -1; /* Image comes before text */
+  }
+}
+
