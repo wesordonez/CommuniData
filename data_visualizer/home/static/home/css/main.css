@@ -244,13 +244,13 @@ img {
 .review-card {
   background-color: #083D77;
   color: #B3DDF2;
-  padding: 20px;
+  padding: 10px;
   margin: 20px;
   border-radius: 5px;
   display: inline-block;
   vertical-align: top;
   flex: 1 0 30%;
-  max-width: 30%;
+  max-width: 100%;
 }
 
 .review-card h3 {
