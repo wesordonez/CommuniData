@@ -60,7 +60,7 @@ class ContactSubmission(models.Model):
     contact_submission_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=MAX_CHAR_LENGTH)
     email = models.EmailField()
-    phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
+    phone = models.CharField(validators=[PHONE_REGEX], max_length=15, null=True, blank=True)
     message = models.TextField()
     
     class Meta:

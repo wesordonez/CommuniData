@@ -1,18 +1,49 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic.edit import FormView
 from home.forms import ContactForm
+from django.contrib.auth.forms import AuthenticationForm
+
+# Removing CSRF token from the form for testing purposes. This needs to be removed later.
+from django.views.decorators.csrf import csrf_exempt
 
 
 def home(request):
-    return render(request, 'home/home.html')
-
-class ContactFromView(ContactForm):
-    form_class = ContactForm
-    template_name = 'home/contact_form.html'    
-    success_url = '/'
+    """Home view function.
     
-    def form_valid(self, form):
-        print("success")
-        return super().form_valid(form)
+    Args:
+        request (HttpRequest): The request object.
+    
+    Returns:
+        HttpResponse: The HTTP response.
+    
+    """
+    return render(request, 'home/home.html', {'form': AuthenticationForm()})
+
+
+@csrf_exempt
+def contact(request):
+    """Contact view function.
+    
+    Args:
+        request (HttpRequest): The request object.
+    
+    Returns:
+        HttpResponse: The HTTP response.
+    
+    """
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = ContactForm()
+    return render(request, 'home/home.html', {'form': form})
+
+def payments(request):
+    return render(request, 'home/payments.html')
+
+# def dashboard(request):
+#     return render(request, 'dashboard/template/dashboard/dashboard.html')
     
