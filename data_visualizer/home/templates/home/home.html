@@ -204,13 +204,14 @@
         </div>
     </section>
       
-    <!-- Final CTA and About Us Section -->
+    <!-- Final CTA and Contact Form Section -->
 
     <section class="cta-section">
         <h2>Are you ready to unlock your community's full potential?</h2>
         <button class="cta-button">Get started now!</button>
         <p class="intro-text">Still got questions? Let's work together to make your community thrive!</p>
-        <form class="contact-form">
+        <form class="contact-form" method="post" action="/contact/">
+            {% csrf_token %}
             <input type="text" id="name" name="name" placeholder="Name:">
             
             <input type="email" id="email" name="email" placeholder="Email:">
