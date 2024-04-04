@@ -113,7 +113,7 @@ img {
 
 .login-button {
   padding: 10px 20px;
-  font-size: 1em; /* Example size, adjust as needed */
+  font-size: 1em;
   width: 100px;
   border-radius: 50px;
   color: #083D77;
@@ -136,14 +136,14 @@ img {
 }
 
 .hero-content h1 {
-  font-size: 2.5em; /* Example size, adjust as needed */
+  font-size: 2.5em; 
   font-weight: 800;
   color: #083D77;
   margin-bottom: 20px;
 }
 
 .hero-content p {
-  font-size: 1.1em; /* Example size, adjust as needed */
+  font-size: 1.1em;
   font-weight: 500;
   color: #083D77;
   margin-bottom: 30px;
@@ -157,7 +157,7 @@ img {
 
 .cta-button {
   padding: 10px 20px;
-  font-size: 1em; /* Example size, adjust as needed */
+  font-size: 1em; 
   color: white;
   background-color: #083D77;
   border: none;
@@ -171,7 +171,7 @@ img {
 }
 
 .cta-button:hover {
-  background-color: #FF4747; /* Darken button on hover */
+  background-color: #FF4747; 
 }
 
 .hero-image {
@@ -179,7 +179,7 @@ img {
 }
 
 .hero-image img {
-  width: 100%; /* Make image responsive */
+  width: 100%;
   height: auto;
   border-radius: 5%;
 }
@@ -214,15 +214,15 @@ img {
   outline: none;
   border: none;
   cursor: pointer;
-  border-radius: 20px;
+  border-radius: 20px 20px 0 0; 
   width: 50%;
   align-items: center;
   text-transform: bold;
-  margin-bottom: 0; /* Remove extra space */
+  margin-bottom: 0;
 }
 
 .active, .collapsible-button:hover {
-  background-color: #003d82; /* Darken button on active/hover */
+  background-color: #003d82;
 }
 
 .content {
@@ -259,7 +259,7 @@ img {
   font-weight: 300;
   padding: 30px;
   margin-top: 0;
-  border-radius: 4px 4px 0 0; /* Only round the top corners */
+  border-radius: 4px 4px 0 0; 
 }
 
 .review-card p {
@@ -276,13 +276,13 @@ img {
   color: white;
   font-weight: 500;
   padding: 10px 20px;
-  font-size: 1em; /* Example size, adjust as needed */
+  font-size: 1em;
   border-radius: 12px;
   cursor: pointer;
 }
 
 .partners {
-  margin-top: 20px; /* Spacing between testimonials and logos */
+  margin-top: 20px; 
   padding: 30px;
   background-color: white;
   border-radius: 45px;
@@ -298,18 +298,19 @@ img {
 .partner-logo {
   display: inline-block;
   margin: 10px;
-  background-color: white; /* Logos likely need to stand out against dark background */
+  background-color: white;
   padding: 10px;
   border-radius: 4px;
 }
 
 .partner-logo img {
-  max-width: 200px; /* Or whatever size fits your design */
+  max-width: 200px; 
   width: auto;
   height: auto;
 }
 
 /* Title for Data Sources and Partners */
+
 .partners h2 {
   font-size: 1.5em;
   color: #083D77;
@@ -317,68 +318,68 @@ img {
   margin-bottom: 20px;
 }
 
-/* You may want to add responsiveness */
+/* responsiveness */
 @media (max-width: 768px) {
   .testimonial-card {
-    width: 100%; /* Stack on small screens */
-    margin: 20px 0; /* Adjust margins for stacking */
+    width: 100%; 
+    margin: 20px 0; 
   }
 }
 
 /* Features Section Styles */
 
 .features-section {
-  max-width: 1200px; /* Max width of the section */
-  margin: 40px auto; /* Center the section */
-  padding: 40px 0; /* Top and bottom padding */
+  max-width: 1200px; 
+  margin: 40px auto; 
+  padding: 40px 0; 
 }
 
 .feature-row {
   display: flex;
-  align-items: center; /* Align items vertically */
-  margin-bottom: 20px; /* Space between feature rows */
-  flex-wrap: wrap; /* Ensure responsiveness */
+  align-items: center; 
+  margin-bottom: 20px; 
+  flex-wrap: wrap; 
 }
 
 .feature-text, .feature-image {
-  flex: 1; /* Each takes up half the width of the container */
-  padding: 20px; /* Padding around text and images */
-  color: #083D77; /* Text color */
+  flex: 1; 
+  padding: 20px;
+  color: #083D77;
 }
 
 .feature-text h3 {
   font-weight: 500;
-  margin-bottom: 15px; /* Space below the title */
+  margin-bottom: 15px;
 }
 
 .feature-text p {
   font-weight: 100;
-  line-height: 1.6; /* Line height for paragraph */
+  line-height: 1.6; 
 }
 
 .feature-image {
-  text-align: center; /* Center the image */
+  text-align: center; 
 }
 
 .feature-image img {
-  max-width: 100%; /* Ensures the image is responsive */
+  max-width: 100%;
   width: 50%;
   border-radius: 10px;
-  height: auto; /* Maintain aspect ratio */
+  height: auto; 
 }
 
 /* Responsive styling for smaller screens */
 @media (max-width: 768px) {
   .feature-row {
-    flex-direction: column; /* Stack elements on top of each other */
+    flex-direction: column; 
   }
 
   .feature-text, .feature-image {
-    flex-basis: 100%; /* Each takes up the full width */
+    flex-basis: 100%; 
   }
 
   .feature-image {
-    order: -1; /* Image comes before text */
+    order: -1;
   }
 }
 
@@ -386,103 +387,103 @@ img {
 /* Call to Action and Contact Form Section Styles */
 
 .cta-section {
-  background-image: linear-gradient(to bottom, #fafafa, #b3ddf2); /* Vertical gradient from white to light blue */
-  text-align: center; /* Centered text */
-  padding: 50px 20px; /* Padding around the section */
-  color: #083D77; /* Dark text for contrast */
+  background-image: linear-gradient(to bottom, #fafafa, #b3ddf2); 
+  text-align: center; 
+  padding: 50px 20px; 
+  color: #083D77; 
 }
 
 .cta-section h2 {
-  font-size: 2em; /* Large font size for the heading */
+  font-size: 2em;
   font-weight: 500;
-  margin-bottom: 30px; /* Spacing under the heading */
+  margin-bottom: 30px;
 }
 
 .cta-section .cta-button {
-  background-color: #083D77; /* Dark blue background */
+  background-color: #083D77; 
   color: white;
   padding: 10px 30px;
   border: none;
-  border-radius: 50px; /* Rounded edges */
+  border-radius: 50px;
   font-size: 1.5em;
   cursor: pointer;
   margin-bottom: 30px;
 }
 
 .cta-button:hover {
-  background-color: #FF4747; /* Slightly darker on hover */
+  background-color: #FF4747;
 }
 
 .intro-text {
-  margin-bottom: 30px; /* Spacing under the introductory text */
+  margin-bottom: 30px;
 }
 
 .contact-form {
-  max-width: 500px; /* Set a max-width for the form */
-  margin: auto; /* Center the form */
+  max-width: 500px;
+  margin: auto; 
 }
 
 .contact-form input,
 .contact-form textarea {
-  width: 100%; /* Full width */
-  padding: 10px; /* Padding inside inputs */
-  margin-bottom: 20px; /* Spacing under inputs */
-  border: 1px solid #ccc; /* Border color */
-  border-radius: 20px; /* Rounded edges for inputs */
+  width: 100%; 
+  padding: 10px; 
+  margin-bottom: 20px; 
+  border: 1px solid #ccc; 
+  border-radius: 20px;
 }
 
 .contact-form .submit-button {
-  background-color: #083D77; /* Dark blue background */
+  background-color: #083D77; 
   color: white;
   padding: 10px 30px;
   border: none;
-  border-radius: 50px; /* Rounded edges */
+  border-radius: 50px;
   font-size: 1em;
   cursor: pointer;
-  width: 50%; /* Full width */
-  box-sizing: border-box; /* Border included in width */
+  width: 50%; 
+  box-sizing: border-box; 
 }
 
 .contact-form .submit-button:hover {
-  background-color: #FF4747; /* Slightly darker on hover */
+  background-color: #FF4747;
 }
 
 
 /* Footer Styles */
 
 .site-footer {
-  background-color: #B3DDF2; /* Dark blue background */
-  color: #083D77; /* Light text for contrast */
-  padding: 0 20px; /* Padding around the footer */
-  text-align: center; /* Centered text */
+  background-color: #B3DDF2; 
+  color: #083D77; 
+  padding: 0 20px; 
+  text-align: center;
 }
 
 .footer-content {
   display: flex;
-  justify-content: space-between; /* Space out the content */
-  align-items: center; /* Align items vertically */
-  flex-wrap: wrap; /* Wrap content on smaller screens */
+  justify-content: space-between; 
+  align-items: center;
+  flex-wrap: wrap; 
 }
 
 .footer-logo {
-  width: 100px; /* Adjust size as needed */
-  height: auto; /* Maintain aspect ratio */
-  margin-bottom: 20px; /* Spacing under the logo */
+  width: 100px; 
+  height: auto; 
+  margin-bottom: 20px; 
 }
 
 .social-media {
-  flex: 1; /* Take up one-third of the space */
-  margin-bottom: 20px; /* Spacing under the links */
+  flex: 1; 
+  margin-bottom: 20px;
 }
 
 .social-media i {
-  font-size: 1.5em; /* Adjust size as needed */
-  margin: 0 10px; /* Spacing between icons */
+  font-size: 1.5em;
+  margin: 0 10px; 
 }
 
 .footer-contact {
-  flex: 1; /* Take up one-third of the space */
-  margin-bottom: 20px; /* Spacing under the contact information */
+  flex: 1; 
+  margin-bottom: 20px; 
 }
 
 
@@ -490,25 +491,25 @@ img {
 
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  width: 100%;
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
 }
 
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 15% auto; 
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 80%; 
 }
 
 /* The Close Button */

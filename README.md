@@ -29,9 +29,10 @@ Before you begin, ensure you have the following installed:
 
 Clone the repo to your local machine
 
-'''bash
+```
 git clone https://github.com/wesordonez/CommuniData.git 
-'''
+
+```
 
 ### Activate the Virtual Environment
 
@@ -41,15 +42,15 @@ It's recommended to use a virtual environment for Python projects to manages dep
 
 Install all required Python packages specified in the 'requirements.txt' file:
 
-'''python
+```python
 pip install -r requirements.txt
-'''
+```
 
 ### Configuring PostgreSQL and PGAdmin4
 
 Create a new PostgreSQL database for CommuniData and update the settings.py file:
 
-'''python
+```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -60,13 +61,13 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-'''
+```
 
 Apply the Django database migrations
 
-'''python
+```python
 python manage.py migrate
-'''
+```
 
 ## Usage
 
@@ -82,9 +83,9 @@ or
 
 Create an admin user for accessing the Django admin interface:
 
-'''python
+```
 python manage.py createsuperuser
-'''
+```
 
 ## Contact
 

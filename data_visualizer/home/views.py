@@ -43,7 +43,4 @@ def contact(request):
 
 def payments(request):
     return render(request, 'home/payments.html')
-
-# def dashboard(request):
-#     return render(request, 'dashboard/template/dashboard/dashboard.html')
-    
+  
