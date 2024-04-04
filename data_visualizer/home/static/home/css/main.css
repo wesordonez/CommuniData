@@ -1,0 +1,528 @@
+/*
+  File: main.css
+  Project: CommuniData
+  Description: CSS Styles for the home app (main page)
+*/
+
+/* Global Styles */
+
+body {
+    background: #fafafa;
+    color: #333333;
+    padding-top: 180px;
+    font-family: Raleway, sans-serif;
+  }
+  
+  ul {
+    margin: 0;
+  }
+  
+  .bg-steel {
+    background-color: #B3DDF2;
+  }
+  
+  
+  
+  .content-section {
+    background: #ffffff;
+    padding: 10px 20px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+  
+  .article-title {
+    color: #444444;
+  }
+  
+  a.article-title:hover {
+    color: #428bca;
+    text-decoration: none;
+  }
+  
+  .article-content {
+    white-space: pre-line;
+  }
+  
+  .article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+  }
+  
+  .article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3
+  }
+  
+  .article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  
+  .account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .account-heading {
+    font-size: 2.5rem;
+  }
+
+/* Header Styles */
+
+.site-header {
+    background-color: #B3DDF2;
+}
+.navbar-container {
+    padding: 10px;
+    margin: auto 10px;
+}
+img {
+  width: 120px; 
+  height: auto; 
+}
+.header-link {
+  color: #083D77;
+  font-family: Raleway, sans-serif;
+  font-weight: 900;
+}
+
+.header-link:hover .star-indicator {
+  color: #FF4747;
+  display: inline-block;
+}
+
+.header-link .star-indicator {
+  display: none;
+}
+
+.login-star-indicator {
+  color: #FF4747;
+  padding: 10px;
+}
+
+.login-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  width: 100px;
+  border-radius: 50px;
+  color: #083D77;
+}
+
+/* Landing Page Styles */
+
+/* Hero Section Styles */
+
+.hero-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px;
+}
+
+.hero-content {
+  max-width: 50%;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 2.5em; 
+  font-weight: 800;
+  color: #083D77;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: #083D77;
+  margin-bottom: 30px;
+}
+
+.hero-cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.cta-button {
+  padding: 10px 20px;
+  font-size: 1em; 
+  color: white;
+  background-color: #083D77;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.hero-content .login-button {
+  padding: 10px 20px;
+  border-color: #083D77;
+}
+
+.cta-button:hover {
+  background-color: #FF4747; 
+}
+
+.hero-image {
+  max-width: 45%;
+}
+
+.hero-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 5%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column;
+  }
+
+  .hero-content,
+  .hero-image {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+
+/* Reviews/Partners Section Styles */
+
+.collapsible-section {
+  margin: 0 auto;
+  width: 98%;
+  text-align: center;
+}
+
+.collapsible-section .collapsible-button {
+  background-color: #083D77; 
+  color: white;
+  padding: 18px;
+  font-size: 1.5em;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px 20px 0 0; 
+  width: 50%;
+  align-items: center;
+  text-transform: bold;
+  margin-bottom: 0;
+}
+
+.active, .collapsible-button:hover {
+  background-color: #003d82;
+}
+
+.content {
+  padding: 30px;
+  border-radius: 45px;
+  display: none;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #083D77;
+  text-align: center;
+}
+
+.reviews {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.review-card {
+  background-color: #083D77;
+  color: #B3DDF2;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 5px;
+  display: inline-block;
+  vertical-align: top;
+  flex: 1 0 30%;
+  max-width: 100%;
+}
+
+.review-card h3 {
+  color: #B3DDF2;
+  font-size: 1.5em;
+  font-weight: 300;
+  padding: 30px;
+  margin-top: 0;
+  border-radius: 4px 4px 0 0; 
+}
+
+.review-card p {
+  color: #B3DDF2;
+  font-size: 1.1em;
+  font-weight: 100;
+  margin-bottom: 0;
+}
+
+.review-btn {
+  background-color: #01735C;
+  border-color: white;
+  border-width: 5px;
+  color: white;
+  font-weight: 500;
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.partners {
+  margin-top: 20px; 
+  padding: 30px;
+  background-color: white;
+  border-radius: 45px;
+}
+
+.partner-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.partner-logo {
+  display: inline-block;
+  margin: 10px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.partner-logo img {
+  max-width: 200px; 
+  width: auto;
+  height: auto;
+}
+
+/* Title for Data Sources and Partners */
+
+.partners h2 {
+  font-size: 1.5em;
+  color: #083D77;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+/* responsiveness */
+@media (max-width: 768px) {
+  .testimonial-card {
+    width: 100%; 
+    margin: 20px 0; 
+  }
+}
+
+/* Features Section Styles */
+
+.features-section {
+  max-width: 1200px; 
+  margin: 40px auto; 
+  padding: 40px 0; 
+}
+
+.feature-row {
+  display: flex;
+  align-items: center; 
+  margin-bottom: 20px; 
+  flex-wrap: wrap; 
+}
+
+.feature-text, .feature-image {
+  flex: 1; 
+  padding: 20px;
+  color: #083D77;
+}
+
+.feature-text h3 {
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.feature-text p {
+  font-weight: 100;
+  line-height: 1.6; 
+}
+
+.feature-image {
+  text-align: center; 
+}
+
+.feature-image img {
+  max-width: 100%;
+  width: 50%;
+  border-radius: 10px;
+  height: auto; 
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+  .feature-row {
+    flex-direction: column; 
+  }
+
+  .feature-text, .feature-image {
+    flex-basis: 100%; 
+  }
+
+  .feature-image {
+    order: -1;
+  }
+}
+
+
+/* Call to Action and Contact Form Section Styles */
+
+.cta-section {
+  background-image: linear-gradient(to bottom, #fafafa, #b3ddf2); 
+  text-align: center; 
+  padding: 50px 20px; 
+  color: #083D77; 
+}
+
+.cta-section h2 {
+  font-size: 2em;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.cta-section .cta-button {
+  background-color: #083D77; 
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.5em;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.cta-button:hover {
+  background-color: #FF4747;
+}
+
+.intro-text {
+  margin-bottom: 30px;
+}
+
+.contact-form {
+  max-width: 500px;
+  margin: auto; 
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%; 
+  padding: 10px; 
+  margin-bottom: 20px; 
+  border: 1px solid #ccc; 
+  border-radius: 20px;
+}
+
+.contact-form .submit-button {
+  background-color: #083D77; 
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1em;
+  cursor: pointer;
+  width: 50%; 
+  box-sizing: border-box; 
+}
+
+.contact-form .submit-button:hover {
+  background-color: #FF4747;
+}
+
+
+/* Footer Styles */
+
+.site-footer {
+  background-color: #B3DDF2; 
+  color: #083D77; 
+  padding: 0 20px; 
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  flex-wrap: wrap; 
+}
+
+.footer-logo {
+  width: 100px; 
+  height: auto; 
+  margin-bottom: 20px; 
+}
+
+.social-media {
+  flex: 1; 
+  margin-bottom: 20px;
+}
+
+.social-media i {
+  font-size: 1.5em;
+  margin: 0 10px; 
+}
+
+.footer-contact {
+  flex: 1; 
+  margin-bottom: 20px; 
+}
+
+
+/* Login Modal */
+
+/* The Modal (background) */
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; 
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

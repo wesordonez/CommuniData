@@ -1,0 +1,11 @@
+{% block content %}
+    <h2>Login</h2>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+        {% if form.non_field_errors %}
+            <p class="errornote">{{ form.non_field_errors }}</p>
+        {% endif %}
+    </form>
+{% endblock %}

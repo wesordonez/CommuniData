@@ -9,89 +9,254 @@
     <!-- Bootstrap CDN --> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     
-    <!-- Custom CSS link -->
-    <link rel="stylesheet" href="{% static 'home/main.css' %}">
-    
-    <title>Chicago Business Data Dashboard</title>
+    <!-- Project links -->
+    <link rel="stylesheet" href="{% static 'home/css/main.css' %}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">    
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/9451864d27.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
+
+    <!-- Navbar/Header -->
     <header class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-            <div class="container">
-                <a class="navbar-brand mr-4" href="{% url 'home' %}">Chicago Business Data Dashboard</a>
+        <nav class="navbar navbar-expand-md bg-steel fixed-top">
+            <div class="container navbar-container">
+                <a class="navbar-brand mr-4" href="{% url 'home' %}">  <img class = "logo" src="{% static 'home/img/CD_Logo.jpeg'%}" alt="CommuniData Logo"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
-                    <div class="navbar-nav mr-auto">
-                        <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
+                    <div class="d-flex w-100">
+                    <!-- Navbar Left Side -->
+                        <div class="navbar-nav mr-auto align-items-center">
+                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#section1">
+                                <i class="fa-solid fa-star star-indicator"></i>
+                                What are they saying?
+                                <i class="fa-solid fa-star star-indicator"></i>
+                            </a>
+                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#section2">
+                                <i class="fa-solid fa-star star-indicator"></i>
+                                How's it work?
+                                <i class="fa-solid fa-star star-indicator"></i>
+                            </a>
+                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#section3">
+                                <i class="fa-solid fa-star star-indicator"></i>
+                                Who are we?
+                                <i class="fa-solid fa-star star-indicator"></i>
+                            </a>
+                        </div>
                     </div>
                     <!-- Navbar Right Side -->
-                    <div class="navbar-nav">
-                        <a class="nav-item nav-link" href="">Register</a>
-                        <a class="nav-item nav-link" href="">Log In</a>
+                    <div class="navbar-nav ml-auto align-items-center">
+                        <i class="fa-solid fa-star login-star-indicator"></i>
+                        <button class="btn btn-light login-button" >Log in!</button>
+                        <i class="fa-solid fa-star login-star-indicator"></i>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    <section class="landing-page">
-        <h1>Welcome to the Chicago Business Data Dashboard!</h1>
-        <p>Use the power to data to drive informed decisions in your community.</p>
-        <div class="buttons">
-            <button class="register-button">Register</button>
-            <button class="login-button">Log In</button>
+    <!-- Login Modal -->
+
+    <div id="loginModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            {% include 'registration/login.html' %}
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Empower Your Communities with Data</h1>
+            <p>Making economic data accessible and actionable for every community has never been easier. Discover insights into new businesses wealth distribution, and more to unlock your community's full potential.</p>
+            <div class="hero-cta-buttons">
+                <a href="{% url 'payments' %}" class="btn btn-primary cta-button">Get started now!</a>
+                <button class="btn btn-light login-button" >Log in!</button>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="{% static 'home/img/hero-image.png' %}" alt="Hero Image">
         </div>
     </section>
 
-    <section class="reviews">
-        <h2>Reviews</h2>
-        <div class="review">
-            <h3>Review 1</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nunc id aliquam ultricies, nisl justo commodo nunc, nec tincidunt nunc nunc id mauris.</p>
-        </div>
-        <div class="review">
-            <h3>Review 2</h3>
-            <p>Curabitur euismod, mauris ut lacinia tincidunt, mi nunc aliquet nunc, nec tincidunt nunc nunc id mauris.</p>
-        </div>
-        <div class="review">
-            <h3>Review 3</h3>
-            <p>Etiam euismod, mauris ut lacinia tincidunt, mi nunc aliquet nunc, nec tincidunt nunc nunc id mauris.</p>
+    <!-- Reviews and Partners Section -->
+
+    <section class="collapsible-section">
+        <button class="collapsible-button">What are they saying?</button>
+        <div class="content">
+            <div class="reviews">
+                <!-- Insert review content here -->
+                <div class="review-card">
+                    <button class="btn btn-primary review-btn">HUMBOLDT PARK</button>
+                    <h3>“ Exporting reports from CommuniData is a breeze, which makes our grant writing and reporting process so much more efficient. 
+                        It’s not just a time-saver; it’s a lifesaver!”</h3>
+                    <p>-
+                        Malcom Crawford
+                        CEO at AAABNA</p>
+                </div>
+                <div class="review-card">
+                    <button class="btn btn-primary review-btn">ENGLEWOOD</button>
+                    <h3>“ I’ve been blown away by how much easier it is to track the growth and challenges within our community 
+                        since we started using CommuniData. It’s like having a bird’s-eye view of where we stand and where we can 
+                        improve.”</h3>
+                    <p>-
+                        Felicia Slaton
+                        Executive Director at GEChamber</p>
+                </div>
+                <div class="review-card">
+                    <button class="btn btn-primary review-btn">SOUL CITY</button>
+                    <h3>“ This platform is phenomenal for getting a clear picture of economic health in our community. 
+                        Visualizing the data makes complex information easy to understand and act upon. 
+                        A must-have tool for any community-focused organization! ”</h3>
+                    <p>-
+                        Honorio Torres
+                        Director of Business Initiatives at PRCC</p>
+                </div>
+            </div>
+            <div class="partners">
+                <h2>Data Sources and Partners</h2>
+                <div class="partner-logos">
+                    <!-- Insert partner logos here -->
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/gec-logo.png' %}" alt="Company 1">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/prcc-logo.png' %}" alt="Company 2">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/aaabna-logo.png' %}" alt="Company 3">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/chi-logo.png' %}" alt="Company 4">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/cdp-logo.png' %}" alt="Company 5">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="{% static 'home/img/wbc-logo.png' %}" alt="Company 6">
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="logos">
-        <h2>Our Partners</h2>
-        <div class="logo">
-            <img src="company1.png" alt="Company 1">
-        </div>
-        <div class="logo">
-            <img src="company2.png" alt="Company 2">
-        </div>
-        <div class="logo">
-            <img src="company3.png" alt="Company 3">
+    <!-- How it Works Section -->
+
+    <section class="features-section">
+        <div class="features">
+            <!-- Feature Row 1 -->
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>Dynamic Dashboards at Your Fingertips</h3>
+                    <p>Unlock a world of economic insights with affordable, user-friendly dashboards. 
+                        From tracking new businesses to analyzing employment trends, CommuniData puts powerful 
+                        data visualization tools in your hands, enabling smart, swift decisions that drive 
+                        community growth.</p>
+                </div>
+                <div class="feature-image">
+                    <img src="{% static 'home/img/feature-img-1.png' %}" alt="Description of image 1">
+                </div>
+            </div>
+            
+            <!-- Feature Row 2 -->
+            <div class="feature-row">
+                <div class="feature-image">
+                    <img src="{% static 'home/img/feature-img-2.png' %}" alt="Description of image 2">
+                </div>
+                <div class="feature-text">
+                    <h3>Effortless Reporting: Export with Ease</h3>
+                    <p>Say goodbye to complicated data manipulation. CommuniData simplifies the creation 
+                        of impactful reports, ready to share with stakeholders or enhance grant proposals. 
+                        With intuitive exporting features, you’re equipped to present your data confidently 
+                        and clearly, anytime.</p>
+                </div>
+            </div>
+            
+            <!-- Feature Row 3 -->
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>AI-Powered Insights Engine</h3>
+                    <p>Dive deeper into your data with AI that works for you. CommuniData delivers 
+                        personalized reports, compelling summaries, and narratives of success that celebrate 
+                        your achievements and guide your future strategies. It’s not just data—it’s your story 
+                        of impact, powered by AI.</p>
+                </div>
+                <div class="feature-image">
+                    <img src="{% static 'home/img/feature-img-3.png' %}" alt="Description of image 3">
+                </div>
+            </div>
+            
+            <!-- Feature Row 4 -->
+            <div class="feature-row">
+                <div class="feature-image">
+                    <img src="{% static 'home/img/feature-img-4.png' %}" alt="Description of image 4">
+                </div>
+                <div class="feature-text">
+                    <h3>Organize and Grow with Advising Tracker</h3>
+                    <p>Optimize your advisory sessions with a sophisticated yet straightforward tracking system. 
+                        CommuniData not only organizes your session notes into an accessible CRM but also leverages 
+                        AI to analyze trends and outcomes. This feature ensures every advising session is a step 
+                        towards measurable success, offering an organized way to manage interactions, monitor 
+                        progress, and strategically plan for future advising efforts.</p>
+                </div>
+            </div>
         </div>
     </section>
+      
+    <!-- Final CTA and Contact Form Section -->
 
-    <section class="call-to-action">
-        <h2>Call to Action</h2>
-        <p>Place your call to action message here.</p>
-        <button class="register-button">Register</button>
-        <p class="contact-link">Looking for custom options? <a href="contact.html">Contact us</a></p>
+    <section class="cta-section">
+        <h2>Are you ready to unlock your community's full potential?</h2>
+        <a href="{% url 'payments' %}" class="btn btn-primary cta-button">Get started now!</a>
+        <p class="intro-text">Still got questions? Let's work together to make your community thrive!</p>
+        <form class="contact-form" method="post" action="/contact/">
+            {% csrf_token %}
+            {{ form.non_field_errors}}
+            <input type="text" id="name" name="name" placeholder="Name:">{{ form.name.errors }}
+            
+            <input type="email" id="email" name="email" placeholder="Email:">{{ form.email.errors }}
+            
+            <input type="tel" id="phone" name="phone" placeholder="Phone (optional):">{{ form.phone.errors }}
+            
+            <textarea id="message" name="message" placeholder="Your message..."></textarea>{{ form.message.errors }}
+            
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
     </section>
 
-    <footer>
-        <div class="logo"></div>
-        <div class="social-media">
-            <img src="facebook.png" alt="Facebook">
-            <img src="twitter.png" alt="Twitter">
-            <img src="instagram.png" alt="Instagram">
+    <!-- Footer Section -->
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="{% static 'home/img/CD_Logo.jpeg' %}" alt="CommuniData Logo">
+            </div>
+            {% comment %} <div class="social-media"> This section will be added in the future; I don't have the links yet.
+                <i class="fab fa-facebook"></i>
+                <i class="fab fa-twitter"></i>
+                <i class="fab fa-instagram"></i>
+            </div> {% endcomment %}
+            <div class-"footer-contact">
+                <p>Phone: 123-456-7890</p>
+                <p>Email: wesordonez1@gmail.com</p>
+                <p>Humboldt Park, Chicago, IL</p>
+                <p>&copy; 2024 CommuniData</p>
+            </div>
         </div>
-        <p>&copy; 2020 Company Name</p>
 
         <!-- Bootstrap JS CDN -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+        <script type="text/javascript" src="{% static 'home/js/script.js' %}"></script>
+    </footer>
 </body>
 </html>
