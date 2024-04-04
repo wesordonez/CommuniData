@@ -71,7 +71,7 @@
             <h1>Empower Your Communities with Data</h1>
             <p>Making economic data accessible and actionable for every community has never been easier. Discover insights into new businesses wealth distribution, and more to unlock your community's full potential.</p>
             <div class="hero-cta-buttons">
-                <button class="btn btn-primary cta-button">Get started now!</button>
+                <a href="{% url 'payments' %}" class="btn btn-primary cta-button">Get started now!</a>
                 <button class="btn btn-outline login-button">Log In</button>
             </div>
         </div>
@@ -208,7 +208,7 @@
 
     <section class="cta-section">
         <h2>Are you ready to unlock your community's full potential?</h2>
-        <button class="cta-button">Get started now!</button>
+        <a href="{% url 'payments' %}" class="btn btn-primary cta-button">Get started now!</a>
         <p class="intro-text">Still got questions? Let's work together to make your community thrive!</p>
         <form class="contact-form" method="post" action="/contact/">
             {% csrf_token %}

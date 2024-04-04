@@ -39,4 +39,7 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'home/home.html', {'form': form})
+
+def payments(request):
+    return render(request, 'home/payments.html')
     
