@@ -36,9 +36,6 @@ def contact(request):
         if form.is_valid():
             form.save()
             return redirect('home')
-        else:
-            print(form.errors)
-            return HttpResponse('Invalid form submission.')
     else:
         form = ContactForm()
     return render(request, 'home/home.html', {'form': form})

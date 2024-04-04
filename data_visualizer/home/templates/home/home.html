@@ -212,13 +212,14 @@
         <p class="intro-text">Still got questions? Let's work together to make your community thrive!</p>
         <form class="contact-form" method="post" action="/contact/">
             {% csrf_token %}
-            <input type="text" id="name" name="name" placeholder="Name:">
+            {{ form.non_field_errors}}
+            <input type="text" id="name" name="name" placeholder="Name:">{{ form.name.errors }}
             
-            <input type="email" id="email" name="email" placeholder="Email:">
+            <input type="email" id="email" name="email" placeholder="Email:">{{ form.email.errors }}
             
-            <input type="tel" id="phone" name="phone" placeholder="Phone (optional):">
+            <input type="tel" id="phone" name="phone" placeholder="Phone (optional):">{{ form.phone.errors }}
             
-            <textarea id="message" name="message" placeholder="Your message..."></textarea>
+            <textarea id="message" name="message" placeholder="Your message..."></textarea>{{ form.message.errors }}
             
             <button type="submit" class="submit-button">Submit</button>
         </form>
