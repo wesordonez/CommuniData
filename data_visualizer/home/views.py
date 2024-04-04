@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic.edit import FormView
 from home.forms import ContactForm
+from django.contrib.auth.forms import AuthenticationForm
 
 # Removing CSRF token from the form for testing purposes. This needs to be removed later.
 from django.views.decorators.csrf import csrf_exempt
@@ -17,7 +18,7 @@ def home(request):
         HttpResponse: The HTTP response.
     
     """
-    return render(request, 'home/home.html')
+    return render(request, 'home/home.html', {'form': AuthenticationForm()})
 
 
 @csrf_exempt
@@ -42,4 +43,7 @@ def contact(request):
 
 def payments(request):
     return render(request, 'home/payments.html')
+
+# def dashboard(request):
+#     return render(request, 'dashboard/template/dashboard/dashboard.html')
     
