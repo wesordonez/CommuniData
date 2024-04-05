@@ -72,7 +72,7 @@ class Consultant(models.Model):
                 
         """
         if not self.slug:
-            self.slug = f"{self.first_name}-{self.last_name}-{self.bip_id}"
+            self.slug = f"{self.first_name}-{self.last_name}"
         super(Consultant, self).save(*args, **kwargs)
             
 
