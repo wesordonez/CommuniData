@@ -175,3 +175,111 @@ class Buildings(models.Model):
             ),
         ]
         
+        
+class Contacts(models.Model):
+    """Contact data model.
+    
+    Args:
+        models (module): The Django models module.
+        contactId (int, optional): The ID of the contact. Defaults to models.AutoField(primary_key=True).
+
+    Attributes:
+        contactId (int): The ID of the contact and Primary Key of the table.
+        first_name (str): The first name of the contact.
+        last_name (str): The last name of the contact.
+        email (str): The email address of the contact.
+        phone (str): The phone number of the contact.
+        business_id (int): Foreign Key to the company the contact is associated with.
+        business_role (str): The role of the contact in the business.
+        alt_phone (str): An alternate phone number for the contact.
+        address (str): The mailing address of the contact.
+        date_of_birth (Date): The date of birth of the contact.
+        gender (str): The gender of the contact.
+        ethnicity (str): The ethnicity of the contact.
+        nationality (str): The nationality of the contact.
+        language (str): The language spoken by the contact.
+        registration_date (Date): The date the contact was registered.
+        notes (str): Any notes about the contact.
+        created_at (DateTime): The date and time the contact was created.
+        updated_at (DateTime): The date and time the contact was last updated.
+        
+    """
+    
+    contact_id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=MAX_CHAR_LENGTH)
+    last_name = models.CharField(max_length=MAX_CHAR_LENGTH)
+    email = models.EmailField(max_length=MAX_CHAR_LENGTH)
+    phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
+    business_id = models.ForeignKey('Business', on_delete=models.CASCADE)
+    business_role = models.CharField(max_length=MAX_CHAR_LENGTH)
+    alt_phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
+    address = models.CharField(max_length=MAX_CHAR_LENGTH)
+    date_of_birth = models.DateField
+    gender = models.CharField(max_length=MAX_CHAR_LENGTH)
+    ethnicity = models.CharField(max_length=MAX_CHAR_LENGTH)
+    nationality = models.CharField(max_length=MAX_CHAR_LENGTH)
+    language = models.CharField(max_length=MAX_CHAR_LENGTH)
+    registration_date = models.DateField
+    notes = models.TextField
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'contacts'
+        
+        
+class Business(models.Model):
+    """Business data model.
+
+    Args:
+        models (module): The Django models module.
+        businessId (int, optional): The ID of the business. Defaults to models.AutoField(primary_key=True).
+        
+    Attributes:
+        business_id (int): The ID of the business and Primary Key of the table.
+        name (str): The name of the business.
+        dba (str): The "doing business as" name of the business.
+        business_description (str): The description of the business.
+        address (str): The address of the business.
+        phone (str): The phone number of the business.
+        email (str): The email address of the business.
+        website (str): The website of the business.
+        industry (str): The industry the business is in.
+        naics_code (str): The NAICS code of the business.
+        date_established (Date): The date the business was established.
+        legal_structure (str): The legal structure of the business.
+        ein (str): The Employer Identification Number of the business.
+        licenses (str): The licenses the business has.
+        contact_id (int): Foreign Key of the contact person for the business.
+        num_employees (int): The number of employees at the business.
+        status (str): The status of the business.
+        notes (str): Any notes about the business.
+        created_at (DateTime): The date and time the business was created.
+        updated_at (DateTime): The date and time the business was last updated.
+    
+    """
+    
+    business_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=MAX_CHAR_LENGTH)
+    dba = models.CharField(max_length=MAX_CHAR_LENGTH)
+    business_description = models.TextField
+    address = models.CharField(max_length=MAX_CHAR_LENGTH)
+    phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
+    email = models.EmailField(max_length=MAX_CHAR_LENGTH)
+    website = models.URLField
+    industry = models.CharField(max_length=MAX_CHAR_LENGTH)
+    naics_code = models.CharField(max_length=MAX_CHAR_LENGTH)
+    date_established = models.DateField
+    legal_structure = models.CharField(max_length=MAX_CHAR_LENGTH)
+    ein = models.CharField(max_length=MAX_CHAR_LENGTH)
+    licenses = models.CharField(max_length=MAX_CHAR_LENGTH)
+    contact_id = models.ForeignKey('Contacts', on_delete=models.CASCADE)
+    num_employees = models.IntegerField
+    status = models.CharField(max_length=MAX_CHAR_LENGTH)
+    notes = models.TextField
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'businesses'
+        
