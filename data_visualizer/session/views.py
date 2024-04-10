@@ -11,29 +11,18 @@ from django.utils.decorators import method_decorator
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class ConsultantAPI(APIView):
+class ConsultantAPIView(APIView):
     """Consultant API view class.
     
-    Args:
-        views (module): The Django REST framework views module.
-        APIView (class): The Django REST framework API view class.
-        Response (class): The Django REST framework response class.
-        status (module): The Django REST framework status module.
-        Consultant (models.Model): The Consultant data model.
-        ConsultantSerializer (serializers.ModelSerializer): The Consultant serializer class.
+    This class is used to define CRUD operations for the Consultant API.
+    
+    Methods:
+        get: Handles GET requests.
+        post: Handles POST requests.
         
     """
     
     def get(self, request):
-        """Handles GET requests.
-        
-        Args:
-            request (Request): The request object.
-            
-        Returns:
-            Response: The response object.
-            
-        """
         
         consultants = Consultant.objects.all()
         serializer = ConsultantSerializer(consultants, many=True)
@@ -41,15 +30,6 @@ class ConsultantAPI(APIView):
     
         
     def post(self, request):
-        """Handles POST requests.
-        
-        Args:
-            request (Request): The request object.
-            
-        Returns:
-            Response: The response object.
-            
-        """
         
         serializer = ConsultantSerializer(data=request.data)
         if serializer.is_valid():
@@ -57,3 +37,24 @@ class ConsultantAPI(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    
+@method_decorator(csrf_exempt, name='dispatch')
+class BipAPIView(APIView):
+    """Bip API view class.
+    
+    This class is used to define CRUD operations for the Bip API.
+    
+    Methods:
+        get: Handles GET requests.
+        post: Handles POST requests.
+        
+    """
+    
+    def get(self, request):
+        
+        return Response("Bip API GET request")
+    
+        
+    def post(self, request):
+        
+        return Response("Bip API POST request")
