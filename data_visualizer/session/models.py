@@ -317,3 +317,39 @@ class Clients(models.Model):
             ),
         ]
         
+        
+class Sessions(models.Model):
+    """Session data model.
+
+    Args:
+        models (module): The Django models module.
+        sessionId (int, optional): The ID of the session. Defaults to models.AutoField(primary_key=True).
+        
+    Attributes:
+        session_id (int): The ID of the session and Primary Key of the table.
+        client_id (int): Foreign Key to the client the session is associated with.
+        consultant_id (int): Foreign Key to the consultant the session is associated with.
+        date (Date): The date of the session.
+        duration (Time): The duration of the session (HH:MM).
+        notes (str): Any notes about the session.
+        status (str): The status of the session.
+        follow_up (date): The follow-up date of the session.
+        created_at (DateTime): The date and time the session was created.
+        updated_at (DateTime): The date and time the session was last updated.        
+        
+    """
+    
+    session_id = models.AutoField(primary_key=True)
+    client_id = models.ForeignKey('Clients', on_delete=models.CASCADE)
+    consultant_id = models.ForeignKey('Consultant', on_delete=models.CASCADE)
+    date = models.DateField
+    duration = models.TimeField
+    notes = models.TextField
+    status = models.CharField(max_length=MAX_CHAR_LENGTH)
+    follow_up = models.DateField
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'advising_sessions'
+    
