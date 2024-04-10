@@ -24,6 +24,14 @@ SPECIALTY_CHOICES = [
     ('5', 'Technology Specialist'),
     ('6', 'Other')
 ]
+PIN_REGEX = RegexValidator(
+    regex=r'^\d{2}-\d{2}-\d{3}-\d{3}-\d{4}$',
+    message="PIN must be in the format 00-00-000-000-0000."
+)
+PROPERTY_CLASS_REGEX = RegexValidator(
+    regex=r'^\d{1}-\d{2}$',
+    message="Property class must be in the format 0-00."
+)
 
 
 class Consultant(models.Model):
@@ -102,4 +110,68 @@ class BusinessInitiativeProgram(models.Model):
 
     class Meta:
         db_table = 'bips'
+        
+        
+class Buildings(models.Model):
+    """Building data model.
+
+    Args:
+        models (module): The Django models module.
+        buildingId (int, optional): The ID of the building. Defaults to models.AutoField(primary_key=True).
+
+    Attributes:
+        pin: CharField (Personal Identification Number, no dashes)
+        address: CharField (Full address)
+        address_number: CharField or IntegerField (Address number)
+        address_street: CharField (Street name of address)
+        zip_code: CharField or IntegerField (ZIP code)
+        chicago_owned_property: CharField (Boolean-like, might need clarification)
+        property_class: CharField or IntegerField (Class code)
+        property_description: TextField (Description of the property)
+        bill_2020: DecimalField (Property tax bill amount for 2020)
+        bill_2021: DecimalField (Property tax bill amount for 2021)
+        assessment_2020: DecimalField (Property tax assessment for 2020)
+        assessment_2021: DecimalField (Property tax assessment for 2021)
+        units: IntegerField (Number of units)
+        area_sq_ft: DecimalField (Area in square feet)
+        lot_size_sf: DecimalField (Lot size in square feet)
+        property_tax_year: IntegerField (The tax year for the property)
+        taxpayer_name: CharField (Name of the taxpayer)
+        taxpayer_address: CharField (Address of the taxpayer)
+        taxpayer_city_state_zip: CharField (City, state, and ZIP of the taxpayer)
+        time_last_checked: DateTimeField (Last time the data was checked)
+        
+    """
+
+    building_id = models.AutoField(primary_key=True)
+    pin = models.CharField(validators=[PIN_REGEX], max_length=20)
+    address = models.CharField(max_length=MAX_CHAR_LENGTH)
+    address_number = models.IntegerField()
+    address_street = models.CharField(max_length=MAX_CHAR_LENGTH)
+    zip_code = models.IntegerField()
+    chicago_owned_property = models.BooleanField()
+    property_class = models.CharField(validators=[PROPERTY_CLASS_REGEX], max_length=5)
+    property_description = models.TextField()
+    tax_bill_2020 = models.DecimalField(max_digits=10, decimal_places=2)
+    tax_bill_2021 = models.DecimalField(max_digits=10, decimal_places=2)
+    assessment_2020 = models.DecimalField(max_digits=10, decimal_places=2)
+    assessment_2021 = models.DecimalField(max_digits=10, decimal_places=2)
+    units = models.IntegerField()
+    area_sq_ft = models.DecimalField(max_digits=10, decimal_places=2)
+    lot_size_sf = models.DecimalField(max_digits=10, decimal_places=2)
+    property_tax_year = models.IntegerField()
+    taxpayer_name = models.CharField(max_length=MAX_CHAR_LENGTH)
+    taxpayer_address = models.CharField(max_length=MAX_CHAR_LENGTH)
+    taxpayer_city_state_zip = models.CharField(max_length=MAX_CHAR_LENGTH)
+    time_last_checked = models.DateTimeField()
+    
+
+    class Meta:
+        db_table = 'buildings'
+        constraints = [
+            UniqueConstraint(
+                fields=['pin', 'address_number'],
+                name='unique_building',
+            ),
+        ]
         
