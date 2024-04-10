@@ -283,3 +283,37 @@ class Business(models.Model):
     class Meta:
         db_table = 'businesses'
         
+        
+class Clients(models.Model):
+    """Client data model.
+
+    Args:
+        models (module): The Django models module.
+        clientId (int, optional): The ID of the client. Defaults to models.AutoField(primary_key=True).
+        
+    Attributes:
+        client_id (int): The ID of the client and Primary Key of the table.
+        business_id (int): Foreign Key to the business the client is associated with.
+        contact_id (int): Foreign Key to the contact person for the client.
+        consultant_id (int): Foreign Key to the consultant the client is associated with.
+        status (str): The status of the client.
+        notes (str): Any notes about the client.
+        
+    """
+    
+    client_id = models.AutoField(primary_key=True)
+    business_id = models.ForeignKey('Business', on_delete=models.CASCADE)
+    contact_id = models.ForeignKey('Contacts', on_delete=models.CASCADE)
+    consultant_id = models.ForeignKey('Consultant', on_delete=models.CASCADE)
+    status = models.CharField(max_length=MAX_CHAR_LENGTH)
+    notes = models.TextField
+    
+    class Meta:
+        db_table = 'clients'
+        constraints = [
+            UniqueConstraint(
+                fields=['business_id', 'contact_id'],
+                name='unique_client',
+            ),
+        ]
+        
