@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Consultant, BusinessInitiativeProgram as Bip
-from .serializers import ConsultantSerializer, BipSerializer
+from .models import Consultant, BusinessInitiativeProgram as Bip, Buildings
+from .serializers import ConsultantSerializer, BipSerializer, BuildingsSerializer
 from django.core.exceptions import ValidationError
 from django.http import Http404
 
@@ -21,6 +21,7 @@ class ConsultantAPIView(APIView):
     Methods:
         get: Handles GET requests.
         post: Handles POST requests.
+        put: Handles PUT requests.
         
     """
     
@@ -66,6 +67,7 @@ class BipAPIView(APIView):
     Methods:
         get: Handles GET requests.
         post: Handles POST requests.
+        put: Handles PUT requests.
         
     """
     
@@ -105,4 +107,22 @@ class BipAPIView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@method_decorator(csrf_exempt, name='dispatch')
+class BuildingsAPIView(APIView):
+    """Building API view class.
+    
+    This class is used to define CRUD operations for the Building API.
+
+    Methods:
+        get: Handles GET requests.
+        put: Handles PUT requests.
+        
+    """
+    
+    def get(self, request):
+        
+        buildings = Buildings.objects.all()
+        serializer = BuildingsSerializer(buildings, many=True)
+        return Response(serializer.data)
     

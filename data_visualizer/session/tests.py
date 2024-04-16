@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from session.models import BusinessInitiativeProgram as Bip
-from session.models import Consultant
+from session.models import BusinessInitiativeProgram as Bip, Consultant, Buildings
 import json
 
 class ConsultantTest(TestCase):
@@ -216,4 +215,37 @@ class BipTest(TestCase):
         
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['name'], 'Test BIP2')
+        
+
+class BuildingsTest(TestCase):
+    def setUp(self):
+        self.building = Buildings.objects.create(
+            building_id=1,
+            pin="00-00-000-000-0000",
+            address="test_address",
+            address_number=123,
+            address_street="test_street",
+            zip_code=12345,
+            chicago_owned_property=True,
+            property_class="0-00",
+            property_description="test_description",
+            tax_bill_2020="100.00",
+            tax_bill_2021="200.00",
+            assessment_2020="300.00",
+            assessment_2021="400.00",
+            units=5,
+            area_sq_ft="600.00",
+            lot_size_sf="700.00",
+            property_tax_year=2021,
+            taxpayer_name="test_name",
+            taxpayer_address="test_taxpayer_address",
+            taxpayer_city_state_zip="test_city_state_zip",
+            time_last_checked="2022-01-01T06:00:00Z"
+        )
+        
+    def test_building_list(self):
+        response = self.client.get(reverse('buildings'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['building_id'], 1)
         
