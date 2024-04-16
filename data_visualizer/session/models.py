@@ -266,7 +266,6 @@ class Contacts(models.Model):
     last_name = models.CharField(max_length=MAX_CHAR_LENGTH)
     email = models.EmailField(max_length=MAX_CHAR_LENGTH)
     phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
-    business_id = models.ForeignKey('Business', on_delete=models.CASCADE)
     business_role = models.CharField(max_length=MAX_CHAR_LENGTH)
     alt_phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
     address = models.CharField(max_length=MAX_CHAR_LENGTH)
@@ -276,7 +275,7 @@ class Contacts(models.Model):
     nationality = models.CharField(max_length=MAX_CHAR_LENGTH)
     language = models.CharField(max_length=MAX_CHAR_LENGTH)
     registration_date = models.DateField()
-    notes = models.TextField
+    notes = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -336,7 +335,7 @@ class Business(models.Model):
     address = models.CharField(max_length=MAX_CHAR_LENGTH)
     phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
     email = models.EmailField(max_length=MAX_CHAR_LENGTH)
-    website = models.URLField
+    website = models.URLField()
     industry = models.CharField(max_length=MAX_CHAR_LENGTH)
     naics_code = models.CharField(max_length=6)
     date_established = models.DateField(null=True, blank=True)
@@ -344,9 +343,9 @@ class Business(models.Model):
     ein = models.CharField(validators=[EIN_REGEX], max_length=9)
     licenses = models.CharField()
     contact_id = models.ForeignKey('Contacts', on_delete=models.CASCADE)
-    num_employees = models.IntegerField
+    num_employees = models.IntegerField()
     status = models.CharField(max_length=MAX_CHAR_LENGTH)
-    notes = models.TextField
+    notes = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
