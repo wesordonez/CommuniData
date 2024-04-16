@@ -34,6 +34,49 @@ PROPERTY_CLASS_REGEX = RegexValidator(
     regex=r'^\d{1}-\d{2}$',
     message="Property class must be in the format 0-00."
 )
+GENDER_CHOICES = [
+    ('M', 'Male'),
+    ('F', 'Female'),
+    ('O', 'Other'),
+    ('N', 'Prefer not to say')
+]
+INDUSTRY_CHOICES = [
+    ('1', 'Agriculture, Forestry, Fishing and Hunting'),
+    ('2', 'Mining, Quarrying, and Oil and Gas Extraction'),
+    ('3', 'Utilities'),
+    ('4', 'Construction'),
+    ('5', 'Manufacturing'),
+    ('6', 'Wholesale Trade'),
+    ('7', 'Retail Trade'),
+    ('8', 'Transportation and Warehousing'),
+    ('9', 'Information'),
+    ('10', 'Finance and Insurance'),
+    ('11', 'Real Estate and Rental and Leasing'),
+    ('12', 'Professional, Scientific, and Technical Services'),
+    ('13', 'Management of Companies and Enterprises'),
+    ('14', 'Administrative and Support and Waste Management and Remediation Services'),
+    ('15', 'Educational Services'),
+    ('16', 'Health Care and Social Assistance'),
+    ('17', 'Arts, Entertainment, and Recreation'),
+    ('18', 'Accommodation and Food Services'),
+    ('19', 'Other Services (except Public Administration)'),
+    ('20', 'Public Administration')
+]
+LEGAL_STRUCTURE_CHOICES = [
+    ('1', 'Sole Proprietorship'),
+    ('2', 'Partnership'),
+    ('3', 'Corporation'),
+    ('4', 'S Corporation'),
+    ('5', 'Limited Liability Company (LLC)'),
+    ('6', 'Nonprofit Corporation'),
+    ('7', 'Cooperative'),
+    ('8', 'Other')
+]
+EIN_REGEX = RegexValidator(
+    regex=r'^\d{2}-\d{7}$',
+    message="EIN must be in the format 00-0000000."
+)
+STATUS_CHOICES = ['Active', 'Inactive', 'Closed']
 
 
 class Consultant(models.Model):
@@ -227,18 +270,32 @@ class Contacts(models.Model):
     business_role = models.CharField(max_length=MAX_CHAR_LENGTH)
     alt_phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
     address = models.CharField(max_length=MAX_CHAR_LENGTH)
-    date_of_birth = models.DateField
+    date_of_birth = models.DateField(default=timezone.now())
     gender = models.CharField(max_length=MAX_CHAR_LENGTH)
     ethnicity = models.CharField(max_length=MAX_CHAR_LENGTH)
     nationality = models.CharField(max_length=MAX_CHAR_LENGTH)
     language = models.CharField(max_length=MAX_CHAR_LENGTH)
-    registration_date = models.DateField
+    registration_date = models.DateField(default=timezone.now())
     notes = models.TextField
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         db_table = 'contacts'
+        constraints = [
+            CheckConstraint(
+                check=Q(date_of_birth__lte=timezone.now().date()),
+                name='valid_date_of_birth',
+            ),
+            CheckConstraint(
+                check=Q(gender__in=[choice[0] for choice in GENDER_CHOICES]),
+                name='valid_gender_choice',
+            ),
+            CheckConstraint(
+                check=Q(registration_date__lte=timezone.now().date()),
+                name='valid_registration_date',
+            ),
+        ]
         
         
 class Business(models.Model):
@@ -275,17 +332,17 @@ class Business(models.Model):
     business_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=MAX_CHAR_LENGTH)
     dba = models.CharField(max_length=MAX_CHAR_LENGTH)
-    business_description = models.TextField
+    description = models.TextField
     address = models.CharField(max_length=MAX_CHAR_LENGTH)
     phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
     email = models.EmailField(max_length=MAX_CHAR_LENGTH)
     website = models.URLField
     industry = models.CharField(max_length=MAX_CHAR_LENGTH)
-    naics_code = models.CharField(max_length=MAX_CHAR_LENGTH)
-    date_established = models.DateField
+    naics_code = models.CharField(max_length=6)
+    date_established = models.DateField(default=timezone.now(), null=True, blank=True)
     legal_structure = models.CharField(max_length=MAX_CHAR_LENGTH)
-    ein = models.CharField(max_length=MAX_CHAR_LENGTH)
-    licenses = models.CharField(max_length=MAX_CHAR_LENGTH)
+    ein = models.CharField(validators=[EIN_REGEX], max_length=9)
+    licenses = models.CharField()
     contact_id = models.ForeignKey('Contacts', on_delete=models.CASCADE)
     num_employees = models.IntegerField
     status = models.CharField(max_length=MAX_CHAR_LENGTH)
@@ -295,6 +352,25 @@ class Business(models.Model):
     
     class Meta:
         db_table = 'businesses'
+        constraints = [
+            CheckConstraint(
+                check=Q(industry__in=[choice[0] for choice in INDUSTRY_CHOICES]),
+                name='valid_industry',
+            ),
+            CheckConstraint(
+                check=Q(date_established__lte=timezone.now().date()),
+                name='valid_date_established',
+            ),
+            CheckConstraint(
+                check=Q(legal_structure__in=[choice[0] for choice in LEGAL_STRUCTURE_CHOICES]),
+                name='valid_legal_structure',
+            ),
+            CheckConstraint(
+                check=Q(status__in=STATUS_CHOICES),
+                name='valid_status',
+            ),
+        ]
+            
         
         
 class Clients(models.Model):
