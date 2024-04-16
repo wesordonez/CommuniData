@@ -270,12 +270,12 @@ class Contacts(models.Model):
     business_role = models.CharField(max_length=MAX_CHAR_LENGTH)
     alt_phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
     address = models.CharField(max_length=MAX_CHAR_LENGTH)
-    date_of_birth = models.DateField(default=timezone.now().date())
+    date_of_birth = models.DateField(default=timezone.now())
     gender = models.CharField(max_length=MAX_CHAR_LENGTH)
     ethnicity = models.CharField(max_length=MAX_CHAR_LENGTH)
     nationality = models.CharField(max_length=MAX_CHAR_LENGTH)
     language = models.CharField(max_length=MAX_CHAR_LENGTH)
-    registration_date = models.DateField(default=timezone.now().date())
+    registration_date = models.DateField(default=timezone.now())
     notes = models.TextField
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -339,7 +339,7 @@ class Business(models.Model):
     website = models.URLField
     industry = models.CharField(max_length=MAX_CHAR_LENGTH)
     naics_code = models.CharField(max_length=6)
-    date_established = models.DateField(null=True, blank=True)
+    date_established = models.DateField(default=timezone.now(), null=True, blank=True)
     legal_structure = models.CharField(max_length=MAX_CHAR_LENGTH)
     ein = models.CharField(validators=[EIN_REGEX], max_length=9)
     licenses = models.CharField()
