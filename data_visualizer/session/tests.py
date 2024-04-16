@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from session.models import BusinessInitiativeProgram as Bip
 from session.models import Consultant
+import json
 
 class ConsultantTest(TestCase):
     def setUp(self):
@@ -126,6 +127,27 @@ class ConsultantTest(TestCase):
         
         self.assertEqual(response.status_code, 400)
         self.assertEqual(str(response.data['bip_id'][0]), 'Invalid pk "0" - object does not exist.')
+        
+
+    def test_consultant_update(self):
+        data = {
+            'first_name': 'Jane',
+            'last_name': 'Doe',
+            'slug': 'jane-doe',
+            'email': 'janedoe2@email.com',
+            'phone': '1234567890',
+            'specialty': '1',
+            'bip_id': self.bip.bip_id
+        }
+        response = self.client.put(reverse('consultant', args=[self.consultant.consultant_id]), 
+                                   data=json.dumps(data), 
+                                   content_type='application/json')
+        
+        print(response.data)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['first_name'], 'Jane')
+        
         
 class BipTest(TestCase):
     def setUp(self):

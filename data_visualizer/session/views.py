@@ -5,6 +5,7 @@ from rest_framework import status
 from .models import Consultant, BusinessInitiativeProgram as Bip
 from .serializers import ConsultantSerializer, BipSerializer
 from django.core.exceptions import ValidationError
+from django.http import Http404
 
 # Removing CSRF token from the form for testing purposes. This needs to be removed later.
 from django.views.decorators.csrf import csrf_exempt
@@ -23,11 +24,19 @@ class ConsultantAPIView(APIView):
         
     """
     
-    def get(self, request):
+    def get(self, request, consultant_id=None):
         
         consultants = Consultant.objects.all()
         serializer = ConsultantSerializer(consultants, many=True)
         return Response(serializer.data)
+    
+    def get_consultant_by_id(self, consultant_id):
+        
+        try:
+            consultant_db = Consultant.objects.get(consultant_id=consultant_id)
+            return consultant_db
+        except Consultant.DoesNotExist:
+            raise Http404('Consultant does not exist.')
     
         
     def post(self, request):
@@ -36,6 +45,15 @@ class ConsultantAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, consultant_id):
+        
+        consultant = self.get_consultant_by_id(consultant_id)
+        serializer = ConsultantSerializer(consultant, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
