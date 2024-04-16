@@ -142,9 +142,7 @@ class ConsultantTest(TestCase):
         response = self.client.put(reverse('consultant', args=[self.consultant.consultant_id]), 
                                    data=json.dumps(data), 
                                    content_type='application/json')
-        
-        print(response.data)
-        
+                
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['first_name'], 'Jane')
         
@@ -203,4 +201,19 @@ class BipTest(TestCase):
         })
         
         self.assertEqual(response.status_code, 400)
+        
+    def test_bip_update(self):
+        data = {
+            'name': 'Test BIP2',
+            'deliverables': 'This is a test BIP2.',
+            'start_date': '2021-01-01',
+            'end_date': '2021-12-31',
+            'contact': 'John Doe'
+        }
+        response = self.client.put(reverse('bip', args=[self.bip.bip_id]), 
+                                   data=json.dumps(data), 
+                                   content_type='application/json')
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['name'], 'Test BIP2')
         

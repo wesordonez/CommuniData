@@ -59,3 +59,23 @@ class BipSerializer(serializers.ModelSerializer):
         model = Bip
         fields = '__all__'
         
+    def update(self, instance, validated_data):
+        """Updates a Business Initiative Program instance.
+        
+        Args:
+            instance (Bip): The Business Initiative Program instance to update.
+            validated_data (dict): The validated data to update the instance with.
+            
+        Returns:
+            instance (Bip): The updated Business Initiative Program instance.
+            
+        """
+        
+        instance.name = validated_data.get('name', instance.name)
+        instance.deliverables = validated_data.get('deliverables', instance.deliverables)
+        instance.start_date = validated_data.get('start_date', instance.start_date)
+        instance.end_date = validated_data.get('end_date', instance.end_date)
+        instance.contact = validated_data.get('contact', instance.contact)
+        instance.save()
+        return instance
+        

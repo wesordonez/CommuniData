@@ -75,6 +75,14 @@ class BipAPIView(APIView):
         serializer = BipSerializer(bip, many=True)
         return Response(serializer.data)
     
+    def get_bip_by_id(self, bip_id):
+            
+        try:
+            bip_db = Bip.objects.get(bip_id=bip_id)
+            return bip_db
+        except Bip.DoesNotExist:
+            raise Http404('Bip does not exist.')
+    
         
     def post(self, request):
         
@@ -87,5 +95,14 @@ class BipAPIView(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             except ValidationError as e:
                 return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, bip_id):
+        
+        bip = self.get_bip_by_id(bip_id)
+        serializer = BipSerializer(bip, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
