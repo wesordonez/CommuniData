@@ -403,3 +403,36 @@ class ContactsTest(TestCase):
     #     self.assertEqual(response.status_code, 400)
     #     self.assertEqual(response.gender[0], '"invalid" is not a valid choice.')
         
+    def test_contact_update_successful(self):
+        data = {
+            'first_name': 'Jane Updated',
+            'last_name': 'Doe',
+            'email': 'email@email.com',
+            'phone': '1234567890',
+            'business_role': 'Test Role',
+            'alt_phone': '1234567890',
+            'address': 'test_address',
+            'date_of_birth': '2021-01-01',
+            'gender': 'F',
+            'ethnicity': 'Hispanic',
+            'nationality': 'American',
+            'language': 'English',
+            'registration_date': '2021-01-01',
+            'notes': 'Test notes'
+        }
+        
+        response = self.client.put(reverse('contact', args=[self.contact.contact_id]), 
+                                   data=json.dumps(data), 
+                                   content_type='application/json')
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['first_name'], 'Jane Updated')
+        
+    def test_contact_update_unsuccessful(self):
+        
+        response = self.client.put(reverse('contact', args=[0]), 
+                                   data=json.dumps({}), 
+                                   content_type='application/json')
+        
+        self.assertEqual(response.status_code, 404)
+        
