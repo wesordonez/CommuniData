@@ -1,11 +1,11 @@
 from django.test import TestCase
 from django.urls import reverse
-from session.models import BusinessInitiativeProgram as BIP
+from session.models import BusinessInitiativeProgram as Bip
 from session.models import Consultant
 
 class ConsultantTest(TestCase):
     def setUp(self):
-        self.bip = BIP.objects.create(
+        self.bip = Bip.objects.create(
             name='Test BIP',
             deliverables='This is a test BIP.',
             start_date='2021-01-01',
@@ -31,9 +31,9 @@ class ConsultantTest(TestCase):
             'email': 'johndoe@email.com',
             'phone': '1234567890',
             'specialty': '1',
-            'bip_id': '1'
+            'bip_id': self.bip.bip_id
         })
-        
+                
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['first_name'], 'John')
         
@@ -126,4 +126,59 @@ class ConsultantTest(TestCase):
         
         self.assertEqual(response.status_code, 400)
         self.assertEqual(str(response.data['bip_id'][0]), 'Invalid pk "0" - object does not exist.')
+        
+class BipTest(TestCase):
+    def setUp(self):
+        self.bip = Bip.objects.create(
+            name='Test BIP',
+            deliverables='This is a test BIP2.',
+            start_date='2021-01-01',
+            end_date='2021-12-31',
+            contact='John Doe'
+        )
+        
+    def test_bip_create(self):
+        response = self.client.post(reverse('bips'), {
+            'name': 'Test Business Initiative Program',
+            'deliverables': 'This is a test Business Initiative Program.',
+            'start_date': '2021-01-01',
+            'end_date': '2021-12-31',
+            'contact': 'John Doe'
+        })
+        
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['name'], 'Test Business Initiative Program')
+        
+    def test_bip_list(self):
+        response = self.client.get(reverse('bips'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['name'], 'Test BIP')
+        
+    def test_bip_create_missing_fields(self):
+        response = self.client.post(reverse('bips'), {
+            'name': '',
+            'deliverables': '',
+            'start_date': '',
+            'end_date': '',
+            'contact': ''
+        })
+        
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['name'][0], 'This field may not be blank.')
+        self.assertEqual(response.data['deliverables'][0], 'This field may not be blank.')
+        self.assertEqual(str(response.data['start_date'][0]), 'Date has wrong format. Use one of these formats instead: YYYY-MM-DD.')
+        self.assertEqual(str(response.data['end_date'][0]), 'Date has wrong format. Use one of these formats instead: YYYY-MM-DD.')
+        self.assertEqual(response.data['contact'][0], 'This field may not be blank.')
+        
+    def test_bip_create_invalid_dates(self):
+        response = self.client.post(reverse('bips'), {
+            'name': 'Test BIP',
+            'deliverables': 'This is a test BIP.',
+            'start_date': '2021-12-31',
+            'end_date': '2021-01-01',
+            'contact': 'John Doe'
+        })
+        
+        self.assertEqual(response.status_code, 400)
         

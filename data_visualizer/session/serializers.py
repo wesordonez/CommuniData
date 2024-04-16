@@ -8,7 +8,7 @@
 
 
 from rest_framework import serializers
-from .models import Consultant
+from .models import Consultant, BusinessInitiativeProgram as Bip
 
 class ConsultantSerializer(serializers.ModelSerializer):
     """Consultant serializer class.
@@ -21,5 +21,18 @@ class ConsultantSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Consultant
+        fields = '__all__'
+        
+class BipSerializer(serializers.ModelSerializer):
+    """Business Initiative Program serializer class.
+    
+    Args:
+        serializers (module): The Django REST framework serializers module.
+        Bip (models.Model): The Business Initiative Program data model.
+        
+    """
+    
+    class Meta:
+        model = Bip
         fields = '__all__'
         

@@ -2,8 +2,9 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Consultant
-from .serializers import ConsultantSerializer
+from .models import Consultant, BusinessInitiativeProgram as Bip
+from .serializers import ConsultantSerializer, BipSerializer
+from django.core.exceptions import ValidationError
 
 # Removing CSRF token from the form for testing purposes. This needs to be removed later.
 from django.views.decorators.csrf import csrf_exempt
@@ -52,9 +53,21 @@ class BipAPIView(APIView):
     
     def get(self, request):
         
-        return Response("Bip API GET request")
+        bip = Bip.objects.all()
+        serializer = BipSerializer(bip, many=True)
+        return Response(serializer.data)
     
         
     def post(self, request):
         
-        return Response("Bip API POST request")
+        serializer = BipSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                instance = Bip(**serializer.validated_data)
+                instance.full_clean()
+                instance.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except ValidationError as e:
+                return Response(e.message_dict, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

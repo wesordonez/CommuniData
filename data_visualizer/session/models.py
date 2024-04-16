@@ -9,6 +9,8 @@
 from django.db import models
 from django.db.models import CheckConstraint, Q, UniqueConstraint
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 
 MAX_CHAR_LENGTH = 100
@@ -110,6 +112,17 @@ class BusinessInitiativeProgram(models.Model):
 
     class Meta:
         db_table = 'bips'
+        
+    def clean(self):
+        """ Overriding the clean method to ensure the start date is before the end date.
+        
+        """
+        super().clean()
+        if self.start_date > timezone.now().date():
+            raise ValidationError("The start date must be before today.")
+        
+        if self.start_date > self.end_date:
+            raise ValidationError("The start date must be before the end date.")
         
         
 class Buildings(models.Model):
