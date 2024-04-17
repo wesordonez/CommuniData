@@ -11,6 +11,7 @@ from django.db.models import CheckConstraint, Q, UniqueConstraint
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from datetime import timedelta
 
 
 MAX_CHAR_LENGTH = 100
@@ -434,14 +435,29 @@ class Sessions(models.Model):
     session_id = models.AutoField(primary_key=True)
     client_id = models.ForeignKey('Clients', on_delete=models.CASCADE)
     consultant_id = models.ForeignKey('Consultant', on_delete=models.CASCADE)
-    date = models.DateField
-    duration = models.TimeField
-    notes = models.TextField
+    date = models.DateField()
+    duration = models.DurationField()
+    notes = models.TextField()
     status = models.CharField(max_length=MAX_CHAR_LENGTH)
-    follow_up = models.DateField
+    follow_up = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         db_table = 'advising_sessions'
+        constraints = [
+            CheckConstraint(
+                check=Q(date__lte=timezone.now().date()),
+                name='valid_session_date',
+            ),
+            CheckConstraint(
+                check=Q(duration__gt=timedelta(minutes=0)),
+                name='valid_duration',
+            ),
+            CheckConstraint(
+                check=Q(status__in=STATUS_CHOICES),
+                name='valid_session_status',
+            ),
+        ]
+        
     
