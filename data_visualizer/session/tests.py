@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from session.models import BusinessInitiativeProgram as Bip, Consultant, Buildings, Contacts, Business
+from session.models import BusinessInitiativeProgram as Bip, Consultant, Buildings, Contacts, Business, Clients
 import json
 
 class ConsultantTest(TestCase):
@@ -643,4 +643,139 @@ class BusinessTest(TestCase):
         print(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['name'], 'Test Business 2')
+        
+        
+class ClientsTest(TestCase):
+    def setUp(self):
+        self.bip = Bip.objects.create(
+            name='Test BIP',
+            deliverables='This is a test BIP.',
+            start_date='2021-01-01',
+            end_date='2021-12-31',
+            contact='John Doe'
+        )
+        self.consultant = Consultant.objects.create(
+            first_name='John',
+            last_name='Doe',
+            slug='john-doe',
+            email='johndoetest@email.com',
+            phone='1234567890',
+            specialty='1',
+            bip_id=self.bip
+        )
+        self.contact = Contacts.objects.create(
+            first_name='John',
+            last_name='Doe',
+            email='johndoe@test.com',
+            phone='1234567890',
+            business_role='Test Role',
+            alt_phone='0987654321',
+            address='test_address',
+            date_of_birth='2021-01-01',
+            gender='M',
+            ethnicity='Hispanic',
+            language='English',
+            registration_date='2021-01-01',
+            notes='Test notes'
+        )
+        self.business = Business.objects.create(
+            name='Test Business',
+            dba='Test DBA',
+            description='This is a test business.',
+            address='123 Test Street',
+            phone='+1234567890',
+            email='test@example.com',
+            website='http://www.example.com',
+            industry=1,
+            naics_code=123456,
+            date_established='2000-01-01',
+            legal_structure=1,
+            ein='00-0000000',
+            licenses='Test License',
+            contact=self.contact,
+            num_employees=10,
+            status='Active',
+            notes='These are test notes.'
+        )
+        self.test_client = Clients.objects.create(
+            business_id=self.business,
+            contact_id=self.contact,
+            consultant_id=self.consultant,
+            status='Active',
+            client_notes='Test notes'
+        )
+        
+    def test_clients_list(self):
+        response = self.client.get(reverse('clients'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['business_id'], self.business.business_id)
+        
+    def test_clients_create(self):
+        self.contact2 = Contacts.objects.create(
+            first_name='John2',
+            last_name='Doe2',
+            email='johndoe2@test.com',
+            phone='1234567890',
+            business_role='Test Role',
+            alt_phone='0987654321',
+            address='test_address',
+            date_of_birth='2021-01-01',
+            gender='M',
+            ethnicity='Hispanic',
+            language='English',
+            registration_date='2021-01-01',
+            notes='Test notes'
+        )
+        response = self.client.post(reverse('clients'), {
+            'business_id': self.business.business_id,
+            'contact_id': self.contact2.contact_id,
+            'consultant_id': self.consultant.consultant_id,
+            'status': 'Active',
+            'client_notes': 'Test notes'
+        })
+        
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['business_id'], self.business.business_id)
+        
+    def test_clients_create_missing_fields(self):
+        response = self.client.post(reverse('clients'), {
+            'business_id': '',
+            'contact_id': '',
+            'consultant_id': '',
+            'status': '',
+            'client_notes': ''
+        })
+        
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['business_id'][0], 'This field may not be null.')
+        
+    def test_clients_create_nonunique_business_contact_ids(self):
+        response = self.client.post(reverse('clients'), {
+            'business_id': self.business.business_id,
+            'contact_id': self.contact.contact_id,
+            'consultant_id': self.consultant.consultant_id,
+            'status': 'Active',
+            'client_notes': 'Test notes'
+        })
+        print(response.data)
+        
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['non_field_errors'][0], 'The fields business_id, contact_id must make a unique set.')   
+        
+    def test_clients_update_successful(self):
+        data = {
+            'business_id': self.business.business_id,
+            'contact_id': self.contact.contact_id,
+            'consultant_id': self.consultant.consultant_id,
+            'status': 'Inactive',
+            'client_notes': 'Test notes updated'
+        }
+        
+        response = self.client.put(reverse('client', args=[self.test_client.client_id]), 
+                                   data=json.dumps(data), 
+                                   content_type='application/json')
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['status'], 'Inactive')
         

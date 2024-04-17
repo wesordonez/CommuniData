@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Consultant, BusinessInitiativeProgram as Bip, Buildings, Contacts, Business
-from .serializers import ConsultantSerializer, BipSerializer, BuildingsSerializer, ContactsSerializer, BusinessSerializer
+from .models import Consultant, BusinessInitiativeProgram as Bip, Buildings, Contacts, Business, Clients
+from .serializers import ConsultantSerializer, BipSerializer, BuildingsSerializer, ContactsSerializer, BusinessSerializer, ClientsSerializer
 from django.core.exceptions import ValidationError
 from django.http import Http404
 
@@ -211,6 +211,51 @@ class BusinessAPIView(APIView):
         
         business = self.get_business_by_id(business_id)
         serializer = BusinessSerializer(business, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+@method_decorator(csrf_exempt, name='dispatch')
+class ClientsAPIView(APIView):
+    """Clients API view class.
+    
+    This class is used to define CRUD operations for the Clients API.
+
+    Methods:
+        get: Handles GET requests.
+        post: Handles POST requests.
+        put: Handles PUT requests.
+        
+    """
+    
+    def get(self, request):
+        
+        clients = Clients.objects.all()
+        serializer = ClientsSerializer(clients, many=True)
+        return Response(serializer.data)
+    
+    def get_client_by_id(self, client_id):
+        
+        try:
+            client_db = Clients.objects.get(client_id=client_id)
+            return client_db
+        except Clients.DoesNotExist:
+            raise Http404('Client does not exist.')
+    
+    def post(self, request):
+        
+        serializer = ClientsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, client_id):
+        
+        client = self.get_client_by_id(client_id)
+        serializer = ClientsSerializer(client, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

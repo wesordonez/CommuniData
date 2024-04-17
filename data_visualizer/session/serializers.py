@@ -8,7 +8,7 @@
 
 
 from rest_framework import serializers
-from .models import Consultant, BusinessInitiativeProgram as Bip, Buildings, Contacts, Business
+from .models import Consultant, BusinessInitiativeProgram as Bip, Buildings, Contacts, Business, Clients
 
 class ConsultantSerializer(serializers.ModelSerializer):
     """Consultant serializer class.
@@ -122,6 +122,22 @@ class BusinessSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Business
+        fields = '__all__'
+        
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
+    
+    
+class ClientsSerializer(serializers.ModelSerializer):
+    """Client serializer class.
+    
+    Args:
+        serializers (_type_): _description_
+        
+    """
+    
+    class Meta:
+        model = Clients
         fields = '__all__'
         
     def update(self, instance, validated_data):

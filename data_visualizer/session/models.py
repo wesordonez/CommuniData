@@ -394,7 +394,7 @@ class Clients(models.Model):
     contact_id = models.ForeignKey('Contacts', on_delete=models.CASCADE)
     consultant_id = models.ForeignKey('Consultant', on_delete=models.CASCADE)
     status = models.CharField(max_length=MAX_CHAR_LENGTH)
-    notes = models.TextField
+    client_notes = models.TextField()
     
     class Meta:
         db_table = 'clients'
@@ -403,6 +403,10 @@ class Clients(models.Model):
                 fields=['business_id', 'contact_id'],
                 name='unique_client',
             ),
+            CheckConstraint(
+                check=Q(status__in=STATUS_CHOICES),
+                name='valid_client_status',
+            )
         ]
         
         
