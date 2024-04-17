@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Consultant, BusinessInitiativeProgram as Bip, Buildings, Contacts
-from .serializers import ConsultantSerializer, BipSerializer, BuildingsSerializer, ContactsSerializer
+from .models import Consultant, BusinessInitiativeProgram as Bip, Buildings, Contacts, Business
+from .serializers import ConsultantSerializer, BipSerializer, BuildingsSerializer, ContactsSerializer, BusinessSerializer
 from django.core.exceptions import ValidationError
 from django.http import Http404
 
@@ -166,6 +166,51 @@ class ContactsAPIView(APIView):
         
         contact = self.get_contact_by_id(contact_id)
         serializer = ContactsSerializer(contact, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+@method_decorator(csrf_exempt, name='dispatch')
+class BusinessAPIView(APIView):
+    """Business API view class.
+    
+    This class is used to define CRUD operations for the Business API.
+
+    Methods:
+        get: Handles GET requests.
+        post: Handles POST requests.
+        put: Handles PUT requests.
+        
+    """
+    
+    def get(self, request):
+        
+        business = Business.objects.all()
+        serializer = BusinessSerializer(business, many=True)
+        return Response(serializer.data)
+    
+    def get_business_by_id(self, business_id):
+        
+        try:
+            business_db = Business.objects.get(business_id=business_id)
+            return business_db
+        except Business.DoesNotExist:
+            raise Http404('Business does not exist.')
+    
+    def post(self, request):
+        
+        serializer = BusinessSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, business_id):
+        
+        business = self.get_business_by_id(business_id)
+        serializer = BusinessSerializer(business, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
