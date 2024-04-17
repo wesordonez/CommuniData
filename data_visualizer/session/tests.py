@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from session.models import BusinessInitiativeProgram as Bip, Consultant, Buildings, Contacts
+from session.models import BusinessInitiativeProgram as Bip, Consultant, Buildings, Contacts, Business
 import json
 
 class ConsultantTest(TestCase):
@@ -435,4 +435,212 @@ class ContactsTest(TestCase):
                                    content_type='application/json')
         
         self.assertEqual(response.status_code, 404)
+        
+        
+class BusinessTest(TestCase):
+    def setUp(self):
+        contact = Contacts.objects.create(
+            first_name='John',
+            last_name='Doe',
+            email='johndoe@test.com',
+            phone='1234567890',
+            business_role='Test Role',
+            alt_phone='0987654321',
+            address='test_address',
+            date_of_birth='2021-01-01',
+            gender='M',
+            ethnicity='Hispanic',
+            language='English',
+            registration_date='2021-01-01',
+            notes='Test notes'
+        )
+        contact.save()
+        test_contact = Contacts.objects.get(contact_id=contact.contact_id)
+        self.business = Business.objects.create(
+            name='Test Business',
+            dba='Test DBA',
+            description='This is a test business.',
+            address='123 Test Street',
+            phone='+1234567890',
+            email='test@example.com',
+            website='http://www.example.com',
+            industry=1,
+            naics_code=123456,
+            date_established='2000-01-01',
+            legal_structure=1,
+            ein='00-0000000',
+            licenses='Test License',
+            contact=test_contact,
+            num_employees=10,
+            status='Active',
+            notes='These are test notes.'
+        )
+        
+    def test_business_list(self):
+        response = self.client.get(reverse('business'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['name'], 'Test Business')
+        
+    def test_business_create(self):
+        response = self.client.post(reverse('business'), {
+            'name': 'Test Business 2',
+            'dba': 'Test DBA 2',
+            'description': 'This is a test business 2.',
+            'address': '123 Test Street',
+            'phone': '+1234567890',
+            'email': 'test@test.com',
+            'website': 'http://www.test.com',
+            'industry': 1,
+            'naics_code': 123456,
+            'date_established': '2000-01-01',
+            'legal_structure': 1,
+            'ein': '00-0000000',
+            'licenses': 'Test License',
+            'contact': 1,
+            'num_employees': 10,
+            'status': 'Active',
+            'notes': 'These are test notes.'
+        })
+        
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['name'], 'Test Business 2')
+        
+    def test_business_create_missing_fields(self):
+        response = self.client.post(reverse('business'), {
+            'name': '',
+            'dba': '',
+            'description': '',
+            'address': '',
+            'phone': '',
+            'email': '',
+            'website': '',
+            'industry': '',
+            'naics_code': '',
+            'date_established': '',
+            'legal_structure': '',
+            'ein': '',
+            'licenses': '',
+            'contact': '',
+            'num_employees': '',
+            'status': '',
+            'notes': ''
+        })
+        
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['name'][0], 'This field may not be blank.')
+        
+    def test_business_create_invalid_phone(self):
+        response = self.client.post(reverse('business'), {
+            'name': 'Test Business 2',
+            'dba': 'Test DBA 2',
+            'description': 'This is a test business 2.',
+            'address': '123 Test Street',
+            'phone': '123',
+            'email': 'test@test.com',
+            'website': 'http://www.test.com',
+            'industry': 1,
+            'naics_code': 123456,
+            'date_established': '2000-01-01',
+            'legal_structure': 1,
+            'ein': '00-0000000',
+            'licenses': 'Test License',
+            'contact': 1,
+            'num_employees': 10,
+            'status': 'Active',
+            'notes': 'These are test notes.'
+        })
+        
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['phone'][0], "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+        
+    def test_business_create_invalid_ein(self):
+        response = self.client.post(reverse('business'), {
+            'name': 'Test Business 2',
+            'dba': 'Test DBA 2',
+            'description': 'This is a test business 2.',
+            'address': '123 Test Street',
+            'phone': '1234567890',
+            'email': 'test@test.com',
+            'website': 'http://www.test.com',
+            'industry': 1,
+            'naics_code': 123456,
+            'date_established': '2009-01-01',
+            'legal_structure': 1,
+            'ein': '00-0000',
+            'licenses': 'Test License',
+            'contact': 2,
+            'num_employees': 10,
+            'status': 'Active',
+            'notes': 'These are test notes.'
+        })
+        
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['ein'][0], 'EIN must be in the format 00-0000000.')
+        
+    def test_business_create_invalid_contact(self):
+        response = self.client.post(reverse('business'), {
+            'name': 'Test Business 2',
+            'dba': 'Test DBA 2',
+            'description': 'This is a test business 2.',
+            'address': '123 Test Street',
+            'phone': '1234567890',
+            'email': 'test@test.com',
+            'website': 'http://www.test.com',
+            'industry': 1,
+            'naics_code': 123456,
+            'date_established': '2009-01-01',
+            'legal_structure': 1,
+            'ein': '00-0000000',
+            'licenses': 'Test License',
+            'contact': 0,
+            'num_employees': 10,
+            'status': 'Active',
+            'notes': 'These are test notes.'
+        })
+        
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(str(response.data['contact'][0]), 'Invalid pk "0" - object does not exist.')
+        
+    def test_business_update_successful(self):
+        contact = Contacts.objects.create(
+            first_name='John',
+            last_name='Doe',
+            email='johndoe@test.com',
+            phone='1234567890',
+            business_role='Test Role',
+            alt_phone='0987654321',
+            address='test_address',
+            date_of_birth='2021-01-01',
+            gender='M',
+            ethnicity='Hispanic',
+            language='English',
+            registration_date='2021-01-01',
+            notes='Test notes'
+        )
+        data = {
+            'name': 'Test Business 2',
+            'dba': 'Test DBA 2',
+            'description': 'This is a test business 2.',
+            'address': '123 Test Street',
+            'phone': '+1234567890',
+            'email': 'test@test.com',
+            'website': 'http://www.test.com',
+            'industry': 1,
+            'naics_code': 123456,
+            'date_established': '2000-01-01',
+            'legal_structure': 1,
+            'ein': '00-0000000',
+            'licenses': 'Test License',
+            'contact': contact.contact_id,
+            'num_employees': 10,
+            'status': 'Active',
+            'notes': 'These are test notes.'
+        }
+        response = self.client.put(reverse('business', args=[self.business.business_id]), 
+                                   data=json.dumps(data), 
+                                   content_type='application/json')
+        print(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['name'], 'Test Business 2')
         
