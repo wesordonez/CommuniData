@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from session.models import BusinessInitiativeProgram as Bip, Consultant, Buildings, Contacts, Business, Clients
+from session.models import BusinessInitiativeProgram as Bip, Consultant, Buildings, Contacts, Business, Clients, Sessions
 import json
 
 class ConsultantTest(TestCase):
@@ -773,6 +773,170 @@ class ClientsTest(TestCase):
         }
         
         response = self.client.put(reverse('client', args=[self.test_client.client_id]), 
+                                   data=json.dumps(data), 
+                                   content_type='application/json')
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['status'], 'Inactive')
+        
+        
+class SessionsTest(TestCase):
+    def setUp(self):
+        self.bip = Bip.objects.create(
+                name='Test BIP',
+                deliverables='This is a test BIP.',
+                start_date='2021-01-01',
+                end_date='2021-12-31',
+                contact='John Doe'
+        )
+        self.consultant = Consultant.objects.create(
+            first_name='John',
+            last_name='Doe',
+            slug='john-doe',
+            email='johndoetest@email.com',
+            phone='1234567890',
+            specialty='1',
+            bip_id=self.bip
+        )
+        self.contact = Contacts.objects.create(
+            first_name='John',
+            last_name='Doe',
+            email='johndoe@test.com',
+            phone='1234567890',
+            business_role='Test Role',
+            alt_phone='0987654321',
+            address='test_address',
+            date_of_birth='2021-01-01',
+            gender='M',
+            ethnicity='Hispanic',
+            language='English',
+            registration_date='2021-01-01',
+            notes='Test notes'
+        )
+        self.business = Business.objects.create(
+            name='Test Business',
+            dba='Test DBA',
+            description='This is a test business.',
+            address='123 Test Street',
+            phone='+1234567890',
+            email='test@example.com',
+            website='http://www.example.com',
+            industry=1,
+            naics_code=123456,
+            date_established='2000-01-01',
+            legal_structure=1,
+            ein='00-0000000',
+            licenses='Test License',
+            contact=self.contact,
+            num_employees=10,
+            status='Active',
+            notes='These are test notes.'
+        )
+        self.test_client = Clients.objects.create(
+            business_id=self.business,
+            contact_id=self.contact,
+            consultant_id=self.consultant,
+            status='Active',
+            client_notes='Test notes'
+        )
+        self.session = Sessions.objects.create(
+            client_id=self.test_client,
+            consultant_id=self.consultant,
+            date='2021-01-01',
+            duration='06:00:00',
+            notes='Test notes',
+            status='Active',
+            follow_up='2021-01-02',
+        )
+        
+    def test_sessions_list(self):
+        response = self.client.get(reverse('sessions'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['session_id'], self.session.session_id)
+        
+    def test_sessions_create(self):
+        response = self.client.post(reverse('sessions'), {
+            'client_id': self.test_client.client_id,
+            'consultant_id': self.consultant.consultant_id,
+            'date': '2021-01-01',
+            'duration': '06:00:00',
+            'notes': 'Test notes',
+            'status': 'Active',
+            'follow_up': '2021-01-02'
+        })
+        
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['client_id'], self.test_client.client_id)
+        
+    def test_sessions_create_missing_fields(self):
+        response = self.client.post(reverse('sessions'), {
+            'client_id': '',
+            'consultant_id': '',
+            'date': '',
+            'duration': '',
+            'notes': '',
+            'status': '',
+            'follow_up': ''
+        })
+        
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['client_id'][0], 'This field may not be null.')
+        
+        # Invalid test because it's check constraint instead of validation error
+    # def test_sessions_create_invalid_date(self):
+    #     response = self.client.post(reverse('sessions'), {
+    #         'client_id': self.test_client.client_id,
+    #         'consultant_id': self.consultant.consultant_id,
+    #         'date': '2099-12-31',
+    #         'duration': '06:00:00',
+    #         'notes': 'Test notes',
+    #         'status': 'Active',
+    #         'follow_up': '2021-01-02'
+    #     })
+        
+    #     self.assertEqual(response.status_code, 400)
+    #     self.assertEqual(response.data['date'][0], 'Date must be in the future.')
+        
+    def test_sessions_create_invalid_duration(self):
+        response = self.client.post(reverse('sessions'), {
+            'client_id': self.test_client.client_id,
+            'consultant_id': self.consultant.consultant_id,
+            'date': '2021-01-01',
+            'duration': 'invalid',
+            'notes': 'Test notes',
+            'status': 'Active',
+            'follow_up': '2021-01-02'
+        })
+        
+        self.assertEqual(response.status_code, 400)
+        
+        #same thing as above, this is check constraint not validation. needs fixing
+    # def test_sessions_create_invalid_status(self):
+    #     response = self.client.post(reverse('sessions'), {
+    #         'client_id': self.test_client.client_id,
+    #         'consultant_id': self.consultant.consultant_id,
+    #         'date': '2021-01-01',
+    #         'duration': '06:00:00',
+    #         'notes': 'Test notes',
+    #         'status': 'invalid',
+    #         'follow_up': '2021-01-02'
+    #     })
+        
+    #     self.assertEqual(response.status_code, 400)
+          
+    def test_sessions_update_successful(self):
+        data = {
+            'client_id': self.test_client.client_id,
+            'consultant_id': self.consultant.consultant_id,
+            'date': '2021-01-01',
+            'duration': '06:00:00',
+            'notes': 'Test notes updated',
+            'status': 'Inactive',
+            'follow_up': '2021-01-02'
+        }
+        
+        response = self.client.put(reverse('session', args=[self.session.session_id]), 
                                    data=json.dumps(data), 
                                    content_type='application/json')
         

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ConsultantAPIView, BipAPIView, BuildingsAPIView, ContactsAPIView, BusinessAPIView, ClientsAPIView
+from .views import ConsultantAPIView, BipAPIView, BuildingsAPIView, ContactsAPIView, BusinessAPIView, ClientsAPIView, SessionAPIView
 
 urlpatterns = [
     path('consultants/', ConsultantAPIView.as_view(), name='consultants'),
@@ -13,4 +13,6 @@ urlpatterns = [
     path('business/<int:business_id>/', BusinessAPIView.as_view(), name='business'),
     path('clients/', ClientsAPIView.as_view(), name='clients'),
     path('clients/<int:client_id>/', ClientsAPIView.as_view(), name='client'),
+    path('sessions/', SessionAPIView.as_view(), name='sessions'),
+    path('sessions/<int:session_id>/', SessionAPIView.as_view(), name='session'),
 ]

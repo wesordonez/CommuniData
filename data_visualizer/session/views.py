@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Consultant, BusinessInitiativeProgram as Bip, Buildings, Contacts, Business, Clients
-from .serializers import ConsultantSerializer, BipSerializer, BuildingsSerializer, ContactsSerializer, BusinessSerializer, ClientsSerializer
+from .models import Consultant, BusinessInitiativeProgram as Bip, Buildings, Contacts, Business, Clients, Sessions
+from .serializers import ConsultantSerializer, BipSerializer, BuildingsSerializer, ContactsSerializer, BusinessSerializer, ClientsSerializer, SessionsSerializer
 from django.core.exceptions import ValidationError
 from django.http import Http404
 
@@ -256,6 +256,51 @@ class ClientsAPIView(APIView):
         
         client = self.get_client_by_id(client_id)
         serializer = ClientsSerializer(client, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class SessionAPIView(APIView):
+    """Session API view class.
+    
+    This class is used to define CRUD operations for the Session API.
+
+    Methods:
+        get: Handles GET requests.
+        post: Handles POST requests.
+        put: Handles PUT requests.
+        
+    """
+    
+    def get(self, request):
+        
+        sessions = Sessions.objects.all()
+        serializer = SessionsSerializer(sessions, many=True)
+        return Response(serializer.data)
+    
+    def get_session_by_id(self, session_id):
+        
+        try:
+            session_db = Sessions.objects.get(session_id=session_id)
+            return session_db
+        except Sessions.DoesNotExist:
+            raise Http404('Session does not exist.')
+    
+    def post(self, request):
+        
+        serializer = SessionsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request, session_id):
+        
+        session = self.get_session_by_id(session_id)
+        serializer = SessionsSerializer(session, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
