@@ -9,6 +9,9 @@
 from django.db import models
 from django.db.models import CheckConstraint, Q, UniqueConstraint
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from datetime import timedelta
 
 
 MAX_CHAR_LENGTH = 100
@@ -32,6 +35,49 @@ PROPERTY_CLASS_REGEX = RegexValidator(
     regex=r'^\d{1}-\d{2}$',
     message="Property class must be in the format 0-00."
 )
+GENDER_CHOICES = [
+    ('M', 'Male'),
+    ('F', 'Female'),
+    ('O', 'Other'),
+    ('N', 'Prefer not to say')
+]
+INDUSTRY_CHOICES = [
+    ('1', 'Agriculture, Forestry, Fishing and Hunting'),
+    ('2', 'Mining, Quarrying, and Oil and Gas Extraction'),
+    ('3', 'Utilities'),
+    ('4', 'Construction'),
+    ('5', 'Manufacturing'),
+    ('6', 'Wholesale Trade'),
+    ('7', 'Retail Trade'),
+    ('8', 'Transportation and Warehousing'),
+    ('9', 'Information'),
+    ('10', 'Finance and Insurance'),
+    ('11', 'Real Estate and Rental and Leasing'),
+    ('12', 'Professional, Scientific, and Technical Services'),
+    ('13', 'Management of Companies and Enterprises'),
+    ('14', 'Administrative and Support and Waste Management and Remediation Services'),
+    ('15', 'Educational Services'),
+    ('16', 'Health Care and Social Assistance'),
+    ('17', 'Arts, Entertainment, and Recreation'),
+    ('18', 'Accommodation and Food Services'),
+    ('19', 'Other Services (except Public Administration)'),
+    ('20', 'Public Administration')
+]
+LEGAL_STRUCTURE_CHOICES = [
+    ('1', 'Sole Proprietorship'),
+    ('2', 'Partnership'),
+    ('3', 'Corporation'),
+    ('4', 'S Corporation'),
+    ('5', 'Limited Liability Company (LLC)'),
+    ('6', 'Nonprofit Corporation'),
+    ('7', 'Cooperative'),
+    ('8', 'Other')
+]
+EIN_REGEX = RegexValidator(
+    regex=r'^\d{2}-\d{7}$',
+    message="EIN must be in the format 00-0000000."
+)
+STATUS_CHOICES = ['Active', 'Inactive', 'Closed']
 
 
 class Consultant(models.Model):
@@ -110,6 +156,17 @@ class BusinessInitiativeProgram(models.Model):
 
     class Meta:
         db_table = 'bips'
+        
+    def clean(self):
+        """ Overriding the clean method to ensure the start date is before the end date.
+        
+        """
+        super().clean()
+        if self.start_date > timezone.now().date():
+            raise ValidationError("The start date must be before today.")
+        
+        if self.start_date > self.end_date:
+            raise ValidationError("The start date must be before the end date.")
         
         
 class Buildings(models.Model):
@@ -210,22 +267,35 @@ class Contacts(models.Model):
     last_name = models.CharField(max_length=MAX_CHAR_LENGTH)
     email = models.EmailField(max_length=MAX_CHAR_LENGTH)
     phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
-    business_id = models.ForeignKey('Business', on_delete=models.CASCADE)
     business_role = models.CharField(max_length=MAX_CHAR_LENGTH)
     alt_phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
     address = models.CharField(max_length=MAX_CHAR_LENGTH)
-    date_of_birth = models.DateField
+    date_of_birth = models.DateField()
     gender = models.CharField(max_length=MAX_CHAR_LENGTH)
     ethnicity = models.CharField(max_length=MAX_CHAR_LENGTH)
     nationality = models.CharField(max_length=MAX_CHAR_LENGTH)
     language = models.CharField(max_length=MAX_CHAR_LENGTH)
-    registration_date = models.DateField
-    notes = models.TextField
+    registration_date = models.DateField()
+    notes = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         db_table = 'contacts'
+        constraints = [
+            CheckConstraint(
+                check=Q(date_of_birth__lte=timezone.now().date()),
+                name='valid_date_of_birth',
+            ),
+            CheckConstraint(
+                check=Q(gender__in=[choice[0] for choice in GENDER_CHOICES]),
+                name='valid_gender_choice',
+            ),
+            CheckConstraint(
+                check=Q(registration_date__lte=timezone.now().date()),
+                name='valid_registration_date',
+            ),
+        ]
         
         
 class Business(models.Model):
@@ -262,26 +332,45 @@ class Business(models.Model):
     business_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=MAX_CHAR_LENGTH)
     dba = models.CharField(max_length=MAX_CHAR_LENGTH)
-    business_description = models.TextField
+    description = models.TextField(default='')
     address = models.CharField(max_length=MAX_CHAR_LENGTH)
     phone = models.CharField(validators=[PHONE_REGEX], max_length=15)
     email = models.EmailField(max_length=MAX_CHAR_LENGTH)
-    website = models.URLField
+    website = models.URLField()
     industry = models.CharField(max_length=MAX_CHAR_LENGTH)
-    naics_code = models.CharField(max_length=MAX_CHAR_LENGTH)
-    date_established = models.DateField
+    naics_code = models.CharField(max_length=6)
+    date_established = models.DateField(null=True, blank=True)
     legal_structure = models.CharField(max_length=MAX_CHAR_LENGTH)
-    ein = models.CharField(max_length=MAX_CHAR_LENGTH)
-    licenses = models.CharField(max_length=MAX_CHAR_LENGTH)
-    contact_id = models.ForeignKey('Contacts', on_delete=models.CASCADE)
-    num_employees = models.IntegerField
+    ein = models.CharField(validators=[EIN_REGEX], max_length=10)
+    licenses = models.CharField()
+    contact = models.ForeignKey('Contacts', on_delete=models.CASCADE)
+    num_employees = models.IntegerField()
     status = models.CharField(max_length=MAX_CHAR_LENGTH)
-    notes = models.TextField
+    notes = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         db_table = 'businesses'
+        constraints = [
+            CheckConstraint(
+                check=Q(industry__in=[choice[0] for choice in INDUSTRY_CHOICES]),
+                name='valid_industry',
+            ),
+            CheckConstraint(
+                check=Q(date_established__lte=timezone.now().date()),
+                name='valid_date_established',
+            ),
+            CheckConstraint(
+                check=Q(legal_structure__in=[choice[0] for choice in LEGAL_STRUCTURE_CHOICES]),
+                name='valid_legal_structure',
+            ),
+            CheckConstraint(
+                check=Q(status__in=STATUS_CHOICES),
+                name='valid_status',
+            ),
+        ]
+            
         
         
 class Clients(models.Model):
@@ -306,7 +395,7 @@ class Clients(models.Model):
     contact_id = models.ForeignKey('Contacts', on_delete=models.CASCADE)
     consultant_id = models.ForeignKey('Consultant', on_delete=models.CASCADE)
     status = models.CharField(max_length=MAX_CHAR_LENGTH)
-    notes = models.TextField
+    client_notes = models.TextField()
     
     class Meta:
         db_table = 'clients'
@@ -315,6 +404,10 @@ class Clients(models.Model):
                 fields=['business_id', 'contact_id'],
                 name='unique_client',
             ),
+            CheckConstraint(
+                check=Q(status__in=STATUS_CHOICES),
+                name='valid_client_status',
+            )
         ]
         
         
@@ -342,14 +435,29 @@ class Sessions(models.Model):
     session_id = models.AutoField(primary_key=True)
     client_id = models.ForeignKey('Clients', on_delete=models.CASCADE)
     consultant_id = models.ForeignKey('Consultant', on_delete=models.CASCADE)
-    date = models.DateField
-    duration = models.TimeField
-    notes = models.TextField
+    date = models.DateField()
+    duration = models.DurationField()
+    notes = models.TextField()
     status = models.CharField(max_length=MAX_CHAR_LENGTH)
-    follow_up = models.DateField
+    follow_up = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         db_table = 'advising_sessions'
+        constraints = [
+            CheckConstraint(
+                check=Q(date__lte=timezone.now().date()),
+                name='valid_session_date',
+            ),
+            CheckConstraint(
+                check=Q(duration__gt=timedelta(minutes=0)),
+                name='valid_duration',
+            ),
+            CheckConstraint(
+                check=Q(status__in=STATUS_CHOICES),
+                name='valid_session_status',
+            ),
+        ]
+        
     
