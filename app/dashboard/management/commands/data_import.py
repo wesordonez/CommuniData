@@ -14,6 +14,8 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         
+        # Import and clean the data
+        
         df = pd.read_csv(file_path)
         df.columns = df.columns.str.lower()
         for column in df.columns:
@@ -22,6 +24,8 @@ class Command(BaseCommand):
         for column in date_columns:
             df[column] = pd.to_datetime(df[column], format='%m/%d/%Y', errors='coerce').dt.date
         df = df.where(pd.notnull(df), None)
+        
+        # Create and persist data in the database
         
         for index, row in df.iterrows():
             BusinessLicenses.objects.create(
@@ -60,5 +64,8 @@ class Command(BaseCommand):
                 longitude=row['longitude'],
                 location=row['location'],
             )
+            
+        # Success message
+        
         self.stdout.write(self.style.SUCCESS('Data imported successfully!'))
     
