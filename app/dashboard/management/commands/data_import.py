@@ -6,7 +6,7 @@ from dashboard.models import BusinessLicenses
 import pandas as pd
 
 
-file_path = '/Data_Visualizer/business_licenses.csv'
+file_path = '../business_licenses.csv'
 
 
 class Command(BaseCommand):
@@ -16,8 +16,9 @@ class Command(BaseCommand):
         
         # Import and clean the data
         
-        df = pd.read_csv(file_path)
+        df = pd.read_csv(file_path, low_memory=False)
         df.columns = df.columns.str.lower()
+                
         for column in df.columns:
             df.rename(columns={column: column.replace(" ", "_")}, inplace=True)
         date_columns = ['application_created_date', 'application_requirements_complete', 'payment_date', 'license_term_start_date', 'license_term_expiration_date', 'license_approved_for_issuance', 'date_issued', 'license_status_change_date']
