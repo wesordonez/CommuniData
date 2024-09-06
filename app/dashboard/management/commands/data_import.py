@@ -6,7 +6,7 @@ from dashboard.models import BusinessLicenses
 import pandas as pd
 
 
-file_path = '../business_licenses.csv'
+file_path = '../business_licenses_26ward.csv'
 
 
 class Command(BaseCommand):
