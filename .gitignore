@@ -236,4 +236,7 @@ pip-selfcheck.json
 .history
 .ionide
 
+# Ignore CSV files
+*.csv
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,django,macos,virtualenv
