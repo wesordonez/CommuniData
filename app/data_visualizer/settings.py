@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 import os
 from dotenv import load_dotenv
-dotenv_path = os.path.join(os.path.dirname(__file__), '../../.env.dev')
+dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(dotenv_path)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +30,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG', default=0))
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
+
+# Ensure to strip any whitespace around the hostnames
+ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS]
 
 # Application definition
 
@@ -84,17 +88,28 @@ WSGI_APPLICATION = 'data_visualizer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get('SQL_ENGINE'),
-        'NAME': os.environ.get('SQL_NAME'),
-        'USER': os.environ.get('SQL_USER'),
-        'PASSWORD': os.environ.get('SQL_PASSWORD'),
-        'HOST': os.environ.get('SQL_HOST'),
-        'PORT': os.environ.get('SQL_PORT')
+if os.getenv('DJANGO_ENV') == 'production':
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ.get('PRD_SQL_ENGINE'),
+            'NAME': os.environ.get('PRD_SQL_NAME'),
+            'USER': os.environ.get('PRD_SQL_USER'),
+            'PASSWORD': os.environ.get('PRD_SQL_PASSWORD'),
+            'HOST': os.environ.get('PRD_SQL_HOST'),
+            'PORT': os.environ.get('PRD_SQL_PORT')
+        }
     }
-}
-
+else:
+    DATABASES = {
+            'default': {
+                'ENGINE': os.environ.get('SQL_ENGINE'),
+                'NAME': os.environ.get('SQL_NAME'),
+                'USER': os.environ.get('SQL_USER'),
+                'PASSWORD': os.environ.get('SQL_PASSWORD'),
+                'HOST': os.environ.get('SQL_HOST'),
+                'PORT': os.environ.get('SQL_PORT')
+            }
+        }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
