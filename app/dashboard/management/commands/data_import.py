@@ -6,7 +6,7 @@ from dashboard.models import BusinessLicenses
 import pandas as pd
 
 
-file_path = '../business_licenses_26ward.csv'
+file_path = '../business_licenses_26th_august_test.csv'
 
 
 class Command(BaseCommand):
@@ -26,46 +26,52 @@ class Command(BaseCommand):
             df[column] = pd.to_datetime(df[column], format='%m/%d/%Y', errors='coerce').dt.date
         df = df.where(pd.notnull(df), None)
         
+        #debugging
+        # print(df.head())
+        
         # Create and persist data in the database
         
         for index, row in df.iterrows():
-            BusinessLicenses.objects.create(
-                business_id=row['id'],
-                license_id=row['license_id'],
-                account_number=row['account_number'],
-                site_number=row['site_number'],
-                legal_name=row['legal_name'],
-                doing_business_as_name=row['doing_business_as_name'],
-                address=row['address'],
-                city=row['city'],
-                state=row['state'],
-                zip_code=row['zip_code'],
-                ward=row['ward'],
-                precinct=row['precinct'],
-                ward_precinct=row['ward_precinct'],
-                police_district=row['police_district'],
-                license_code=row['license_code'],
-                license_description=row['license_description'],
-                business_activity_id=row['business_activity_id'],
-                business_activity=row['business_activity'],
-                license_number=row['license_number'],
-                application_type=row['application_type'],
-                application_created_date=row['application_created_date'],
-                application_requirements_complete=row['application_requirements_complete'],
-                payment_date=row['payment_date'],
-                conditional_approval=row['conditional_approval'],
-                license_term_start_date=row['license_term_start_date'],
-                license_term_expiration_date=row['license_term_expiration_date'],
-                license_approved_for_issuance=row['license_approved_for_issuance'],
-                date_issued=row['date_issued'],
-                license_status=row['license_status'],
-                license_status_change_date=row['license_status_change_date'],
-                ssa=row['ssa'],
-                latitude=row['latitude'],
-                longitude=row['longitude'],
-                location=row['location'],
-            )
-            
+            try:
+                BusinessLicenses.objects.create(
+                    business_id=row['id'],
+                    license_id=row['license_id'],
+                    account_number=row['account_number'],
+                    site_number=row['site_number'],
+                    legal_name=row['legal_name'],
+                    doing_business_as_name=row['doing_business_as_name'],
+                    address=row['address'],
+                    city=row['city'],
+                    state=row['state'],
+                    zip_code=row['zip_code'],
+                    ward=row['ward'],
+                    precinct=row['precinct'],
+                    ward_precinct=row['ward_precinct'],
+                    police_district=row['police_district'],
+                    license_code=row['license_code'],
+                    license_description=row['license_description'],
+                    business_activity_id=row['business_activity_id'],
+                    business_activity=row['business_activity'],
+                    license_number=row['license_number'],
+                    application_type=row['application_type'],
+                    application_created_date=row['application_created_date'],
+                    application_requirements_complete=row['application_requirements_complete'],
+                    payment_date=row['payment_date'],
+                    conditional_approval=row['conditional_approval'],
+                    license_term_start_date=row['license_term_start_date'],
+                    license_term_expiration_date=row['license_term_expiration_date'],
+                    license_approved_for_issuance=row['license_approved_for_issuance'],
+                    date_issued=row['date_issued'],
+                    license_status=row['license_status'],
+                    license_status_change_date=row['license_status_change_date'],
+                    ssa=row['ssa'],
+                    latitude=row['latitude'],
+                    longitude=row['longitude'],
+                    location=row['location'],
+                )
+            except Exception as e:
+                print(f"Error processing row {index}: {e}")
+                
         # Success message
         
         self.stdout.write(self.style.SUCCESS('Data imported successfully!'))
