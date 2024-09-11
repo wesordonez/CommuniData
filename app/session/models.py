@@ -342,7 +342,7 @@ class Business(models.Model):
     date_established = models.DateField(null=True, blank=True)
     legal_structure = models.CharField(max_length=MAX_CHAR_LENGTH)
     ein = models.CharField(validators=[EIN_REGEX], max_length=10)
-    licenses = models.CharField()
+    licenses = models.CharField(max_length=MAX_CHAR_LENGTH)
     contact = models.ForeignKey('Contacts', on_delete=models.CASCADE)
     num_employees = models.IntegerField()
     status = models.CharField(max_length=MAX_CHAR_LENGTH)
