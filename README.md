@@ -87,6 +87,19 @@ Create an admin user for accessing the Django admin interface:
 python manage.py createsuperuser
 ```
 
+### Data Import Script
+
+I created a python script that will import csv files from the Chicago Data Portal. This is a bandaid solution just to get some data in the database quickly to facilitate development. However, for whatever strange reason, it is not very robust and won't accept any csv unless the data is copied into either "business_licenses_test" or "business_licenses". I suspect it has something to do with encoding (utf-8 with BOM which works but utf-8 doesn't, but that's not the whole picture either). For now, until a better solution is created here is the process to import new data:
+
+- download csv from chicago data portal. (ideally in csv for excel format)
+- move the file into the root directory and open it using VS Code.
+- copy the data (below the header) and paste into either working csv files. 
+- run the import script:
+```
+python manage.py data_import
+```
+If you get success message, confirm in PGAdmin that data import was successful. 
+
 ## Contact
 
 - Email: wesordonez1@gmail.com
