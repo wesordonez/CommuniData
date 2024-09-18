@@ -1,10 +1,9 @@
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc, html
 import plotly.express as px
 from django_plotly_dash import DjangoDash
 import pandas as pd
-import psycopg2
+from sqlalchemy import create_engine
 import os
 
 
@@ -13,14 +12,10 @@ app = DjangoDash('BusinessDashboard')
 
 # Connect to the database
 def get_data():
-    connection = psycopg2.connect(user = os.environ.get('SQL_USER'),
-                                    password = os.environ.get('SQL_PASSWORD'),
-                                    host = os.environ.get('SQL_HOST'),
-                                    port = os.environ.get('SQL_PORT'),
-                                    database = os.environ.get('SQL_NAME'))
+    db_url = f"postgresql://{os.environ.get('SQL_USER')}:{os.environ.get('SQL_PASSWORD')}@{os.environ.get('SQL_HOST')}:{os.environ.get('SQL_PORT')}/{os.environ.get('SQL_NAME')}"
+    engine = create_engine(db_url)
     query = "SELECT * FROM business_licenses_full"
-    df = pd.read_sql(query, connection)
-    connection.close()
+    df = pd.read_sql(query, engine)
     return df
 
 # Get the data
@@ -30,6 +25,10 @@ df = get_data()
 fig = px.bar(df, x='ward', y='license_number', title='Business Licenses by Ward')
 
 # Define the layout
-app.layout = html.Div([
-    dcc.Graph(figure=fig)
+app.layout = html.Div(children=[
+    html.H1(children='Business Licenses Dashboard'),
+    dcc.Graph(
+        id='example-graph',
+        figure=px.bar(get_data(), x='license_id', y='license_status')
+    )
 ])
