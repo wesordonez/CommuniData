@@ -1,14 +1,90 @@
 {% load plotly_dash %}
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Business Dashboard</title>
-    <h1>Work in Progress</h1>
-    <h1>link/connection to dashboard app/views</h1>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Business Licenses Dashboard">
+    <meta name="keywords" content="Business Licenses, Dashboard, Data Visualization">
+
+    <!-- CSS Styling Link -->
+     <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+
+    <!-- Title -->
+    <title>CommuniData Dashboard</title>
+ 
 </head>
 <body>
-    <div id="dash-container">
-        {% plotly_app name="BusinessDashboard" %}
-    </div>
+    <!-- Navigation Bar -->
+     <aside class="sidebar">
+        <div class="logo">
+            <img src="{% static 'dashboard/img/CD_Logo.jpeg' %}" alt="CommuniData Logo" width="50" height="50">
+        </div>
+        <nav class="nav-links">
+          <a href="#">Dashboard</a>
+          <a href="#">Advising</a>
+          <a href="#">Consultants</a>
+          <a href="#">Programs</a>
+          <a href="#">Clients</a>
+          <a href="#">Businesses</a>
+          <a href="#">Buildings</a>
+          <a href="#">Reports</a>
+        </nav>
+      </aside>
+
+    <!-- Dashboard Content -->
+     <div class="dashboard-content">
+        
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <h1>Humboldt Park - PRCC</h1>
+            <p>Monday, April 29, 2024</p>
+            <div class="user-actions">
+            <span class="search-icon">🔍</span>
+            <div class="user-profile">
+                <span>Honorio Torres</span>
+                <span>Director of PRCC</span>
+            </div>
+            </div>
+        </header>
+    
+        <!-- Dashboard Cards -->
+        <section class="cards-container">
+            <!-- Info Cards -->
+            <div class="card">
+            <h3>New Businesses in April</h3>
+            <p>Placeholder for data</p>
+            </div>
+            <div class="card">
+            <h3>Active Clients</h3>
+            <p>Placeholder for data</p>
+            </div>
+            <div class="card">
+            <h3>Available Commercial Inventory</h3>
+            <p>Placeholder for data</p>
+            </div>
+            <div class="card">
+            <h3>Average Advising Session Duration</h3>
+            <p>Placeholder for data</p>
+            </div>
+    
+            <!-- Chart Placeholders -->
+            <div class="chart-card">
+            <h3>Businesses in Humboldt Park</h3>
+            <div class="chart-placeholder">Chart Placeholder</div>
+            </div>
+            <div class="chart-card">
+            <h3>Business Type Distribution</h3>
+            <div class="chart-placeholder">Chart Placeholder</div>
+            </div>
+            <div class="chart-card">
+            <h3>Top Consultants by Sessions</h3>
+            <div class="chart-placeholder">Chart Placeholder</div>
+            </div>
+        </section>
+        </div>
+
 </body>
 </html>
