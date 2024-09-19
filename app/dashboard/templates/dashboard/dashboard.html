@@ -72,7 +72,7 @@
         <section class="cards-container">
             <!-- Info Cards -->
             <div class="card">
-            <h3>New Businesses in April</h3>
+            <h3>New Businesses in [MONTH]</h3>
             <p>Placeholder for data</p>
             </div>
             <div class="card">
@@ -90,8 +90,10 @@
     
             <!-- Chart Placeholders -->
             <div class="chart-card">
-            <h3>Businesses in Humboldt Park</h3>
-            <div class="chart-placeholder">Chart Placeholder</div>
+            <h3>New Businesses Licenses by Month in Humboldt Park</h3>
+            <div class="chart-placeholder">
+                {% plotly_app 'BusinessDashboard' %}
+            </div>
             </div>
             <div class="chart-card">
             <h3>Business Type Distribution</h3>

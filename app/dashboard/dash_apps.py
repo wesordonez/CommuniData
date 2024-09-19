@@ -42,11 +42,12 @@ fig = px.bar(df_businesses_by_month_2023, x='month', y='count',
              labels={'month': 'Month', 'count': 'Number of Licenses'})
 
 app.layout = html.Div([
-    html.H1('Business Licenses Dashboard'),
-    dcc.Graph(
-        id='business-licenses-by-month',
-        figure=fig
-    )
+    html.Div([
+        html.H1('Business Licenses Dashboard Plotly TEST1'),
+    ], className='text1'),
+    html.Div([
+        html.H1('Business Licenses Dashboard Plotly TEST2'),
+    ], className='text2'),
 ])
 
 # # Example Viz
