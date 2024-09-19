@@ -18,3 +18,13 @@ function collapseSidebar() {
 }
 
 collapseSidebar();
+
+// Get today's date
+function formatDate(date) {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
+
+const date = new Date();
+const today = formatDate(date);
+document.getElementById('current-date').textContent = today;
