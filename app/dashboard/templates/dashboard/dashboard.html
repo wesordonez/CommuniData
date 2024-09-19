@@ -49,15 +49,22 @@
         <!-- Top Bar -->
         <header class="top-bar">
             <main>
-                <h1>Humboldt Park - PRCC</h1>
+                <h1>Humboldt Park - 26th Ward</h1>
                 <p id="current-date"></p>
             </main>
             <div class="user-actions">
-            <span class="search-icon">🔍</span>
-            <div class="user-profile">
-                <span>Honorio Torres</span>
-                <span>Director of PRCC</span>
-            </div>
+                <div class="user-search">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                </div>
+                <div class="user-profile">
+                    <div class="user-profile-image-container">
+                        <img src="{% static 'dashboard/img/avatar.png' %}" alt="User Profile" width="40" height="40">
+                    </div>
+                    <div class="user-info">
+                        <h2 id="user-name">Honorio Torres</h2>
+                        <p id="user-role">Director of PRCC</p>
+                    </div>
+                </div>
             </div>
         </header>
     

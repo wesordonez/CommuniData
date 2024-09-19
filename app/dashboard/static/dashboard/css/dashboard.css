@@ -126,18 +126,61 @@
     display: flex;
     align-items: center;
   }
+
+  .user-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 50%;
+    padding: 10px;
+    margin-right: 20px;
+    width: 50px;
+    height: 50px;
+  }
   
   .search-icon {
     font-size: 1.5rem;
-    margin-right: 20px;
+    color: #2c4870;
   }
   
   .user-profile {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+    border-radius: 50px;
+    padding: 10px;
     color: #333;
+    height: 50px;
   }
+
+  .user-profile-image-container {
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #2c4870;
+  }
+
+.user-profile img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.user-info {
+    margin-left: 10px;
+    padding: 5px;
+}
+
+.user-info h2 {
+    font-size: 1.2rem;
+    color: #1e3658;
+    }
+    
+.user-info p {
+font-size: 1rem;
+color: #637a92;
+}
   
   /* Cards Layout */
   .cards-container {
