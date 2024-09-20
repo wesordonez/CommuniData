@@ -8,3 +8,4 @@ class DashboardConfig(AppConfig):
     def ready(self):
         import dashboard.dash_apps
         import dashboard.dash_apps.business_licenses_monthly
+        import dashboard.dash_apps.business_licenses_distribution
