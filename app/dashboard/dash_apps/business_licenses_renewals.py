@@ -80,8 +80,17 @@ app.layout = html.Div([
     dash_table.DataTable(
         id='renewals-table',
         data=renewals_due.to_dict('records'),
-        columns=[{'name': i, 'id': i} for i in df.columns],
+        columns=[
+            {'name': 'Legal Name', 'id': 'legal_name'},
+            {'name': 'Doing Business As Name', 'id': 'doing_business_as_name'},
+            {'name': 'Application Type', 'id': 'application_type'},
+            {'name': 'License Description', 'id': 'license_description'},
+            {'name': 'License Term Start Date', 'id': 'license_term_start_date'},
+            {'name': 'License Term Expiration Date', 'id': 'license_term_expiration_date'},
+            {'name': 'Days Until Expiration', 'id': 'days_until_expiration'},
+        ],
         page_size=10,
+        style_header={'backgroundColor': 'rgb(230, 230, 230)', 'fontWeight': 'bold'},
     ),
 ])
 
