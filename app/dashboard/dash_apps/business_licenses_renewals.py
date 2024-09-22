@@ -89,7 +89,7 @@ app.layout = html.Div([
             {'name': 'License Term Expiration Date', 'id': 'license_term_expiration_date'},
             {'name': 'Days Until Expiration', 'id': 'days_until_expiration'},
         ],
-        page_size=10,
+        page_size=11,
         style_header={'backgroundColor': 'rgb(230, 230, 230)', 'fontWeight': 'bold'},
     ),
 ])
