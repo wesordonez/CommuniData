@@ -27,7 +27,7 @@ df['date_issued'] = pd.to_datetime(df['date_issued'], errors='coerce')
 if df['date_issued'].isnull().any():
     print('There are missing values in the date_issued column')
     
-def get_distribution_by_year(df, year, threshold=0.01):
+def get_distribution_by_year(df, year, threshold=0.05):
     df['year'] = df['date_issued'].dt.year
     df_year = df[df['year'] == year]
 
@@ -45,7 +45,16 @@ def get_distribution_by_year(df, year, threshold=0.01):
 df_distribution = get_distribution_by_year(df, 2021)
 
 fig = px.pie(df_distribution, values='count', names='grouped_category',)
-fig.update_traces(textposition='inside', textinfo='percent+label')
+fig.update_traces(textposition='outside', textinfo='percent+label')
+fig.update_layout(
+        legend=dict(
+            orientation='h',
+            yanchor='bottom',
+            y=-1,
+            xanchor='center',
+            x=0.5
+    )
+    )
 
 # App layout and callback
 
@@ -60,18 +69,36 @@ app.layout = html.Div([
         value=2021,
         labelStyle={'display': 'inline-block'}
     ),
+    dcc.Slider(
+        id='threshold-slider',
+        min=1,
+        max=10,
+        step=1,
+        value=5,
+        marks={i: f'{i}%' for i in range(1, 11)}
+    ),
     dcc.Graph(id='graph', figure=fig)
 ])
 
 @app.callback(
     Output('graph', 'figure'),
-    Input('year-radio', 'value')
+    Input('year-radio', 'value'),
+    Input('threshold-slider', 'value'),
 )
-def update_graph(selected_year):
-    df_distribution = get_distribution_by_year(df, selected_year)
+def update_graph(selected_year, threshold):
+    df_distribution = get_distribution_by_year(df, selected_year, threshold/100)
     
-    fig = px.bar(df_distribution, x='month', y='count',
-                 labels={'month': 'Month', 'count': 'Number of Licenses'})
+    fig = px.pie(df_distribution, values='count', names='grouped_category',)
+    fig.update_traces(textposition='outside', textinfo='percent+label')
+    fig.update_layout(
+        legend=dict(
+            orientation='h',
+            yanchor='bottom',
+            y=-1,
+            xanchor='center',
+            x=0.5
+    )
+    )
     
     return fig
 
