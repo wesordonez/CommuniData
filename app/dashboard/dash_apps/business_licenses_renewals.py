@@ -54,7 +54,7 @@ def get_renewals_due(df, days=30):
         
     if renewals_due.empty:
         print(f"No renewals due within {days} days.")
-        renewals_due = df.sort_values('license_term_expiration_date', ascending=False).head(10)
+        renewals_due = df.sort_values('license_term_expiration_date', ascending=False).head(0)
         return renewals_due
     
     renewals_due = renewals_due.sort_values('days_until_expiration', ascending=False)
@@ -76,6 +76,7 @@ app.layout = html.Div([
         value=30,
         marks={i: str(i) for i in range(0, 61, 10)},
     ),
+    html.Div(id='renewals-table-message', style={'color': 'red'}),
     dash_table.DataTable(
         id='renewals-table',
         data=renewals_due.to_dict('records'),
@@ -85,11 +86,16 @@ app.layout = html.Div([
 ])
 
 @app.callback(
-    Output('graph', 'figure'),
+    Output('renewals-table', 'data'),
     Input('days-slider', 'value'),
 )
 def update_table(days):
-    return get_renewals_due(df, days)
+    renewals_update = get_renewals_due(df, days)
+    
+    if renewals_update.empty:
+        return f"No renewals due within {days} days."
+    
+    return renewals_update.to_dict('records')
     
 
 if __name__ == '__main__':
