@@ -26,11 +26,20 @@ df = get_data()
 df['license_term_start_date'] = pd.to_datetime(df['license_term_start_date'], errors='coerce')
 df['license_term_expiration_date'] = pd.to_datetime(df['license_term_expiration_date'], errors='coerce')
 
-if df['license_term_start_date'].isnull().any():
-    print('There are missing values in the license_term_start_date column')
+if df['license_term_start_date'].isnull().sum() < 0.05 * len(df):
+    df.dropna(subset=['license_term_start_date'], inplace=True)
+else:
+    print('There is a large number of missing values in the license_term_start_date column:')
+    print(df['license_term_start_date'].isnull().sum())
+    print(0.05 * len(df))
 
-if df['license_term_expiration_date'].isnull().any():
-    print('There are missing values in the license_term_expiration_date column')
+
+if df['license_term_expiration_date'].isnull().sum() < 0.05 * len(df):
+    df.dropna(subset=['license_term_expiration_date'], inplace=True)
+else:
+    print('There is a large number missing values in the license_term_expiration_date column:')
+    print(df['license_term_expiration_date'].isnull().sum())
+    print(0.05 * len(df))
     
 values_to_drop = ['c_loc', 'c_sba', 'c_expa', 'c_capa']
 
@@ -38,13 +47,23 @@ df = df[~df['application_type'].isin(values_to_drop)]
     
 def get_renewals_due(df, days=30):
     today = pd.Timestamp.today().normalize()
-    renewals_due = df[(df['license_term_expiration_date'] - today).dt.days <= days]
     
+    df['days_until_expiration'] = (df['license_term_expiration_date'] - today).dt.days
+    
+    renewals_due = df[(df['days_until_expiration'] >= 0) & (df['days_until_expiration'] <= days)]
+        
     if renewals_due.empty:
         print(f"No renewals due within {days} days.")
-        return df.sort_values('license_term_expiration_date', ascending=False).head(10)
+        renewals_due = df.sort_values('license_term_expiration_date', ascending=False).head(10)
+        return renewals_due
+    
+    renewals_due = renewals_due.sort_values('days_until_expiration', ascending=False)
+    renewals_due['license_term_start_date'] = renewals_due['license_term_start_date'].dt.strftime('%Y-%m-%d')
+    renewals_due['license_term_expiration_date'] = renewals_due['license_term_expiration_date'].dt.strftime('%Y-%m-%d')
     
     return renewals_due
+
+renewals_due = get_renewals_due(df)
 
 # App layout and callback
 
@@ -59,6 +78,7 @@ app.layout = html.Div([
     ),
     dash_table.DataTable(
         id='renewals-table',
+        data=renewals_due.to_dict('records'),
         columns=[{'name': i, 'id': i} for i in df.columns],
         page_size=10,
     ),
@@ -66,8 +86,7 @@ app.layout = html.Div([
 
 @app.callback(
     Output('graph', 'figure'),
-    Input('year-radio', 'value'),
-    Input('threshold-slider', 'value'),
+    Input('days-slider', 'value'),
 )
 def update_table(days):
     return get_renewals_due(df, days)
