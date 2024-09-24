@@ -48,9 +48,11 @@ else:
     print(df['date_issued'].isnull().sum())
     print(0.05 * len(df))
     
-# Step 1: Separate out the unique accounts
 def get_histogram():
+    
+    # Step 1: Separate out the unique accounts
     account_counts = df['account_number'].value_counts()
+    
     unique_accounts = account_counts[account_counts == 1].index
     df_unique = df[df['account_number'].isin(unique_accounts)]
 
@@ -66,15 +68,54 @@ def get_histogram():
         print((df_unique['operation_time'] < 0).sum())
         print(0.05 * len(df_unique))
         
-    return df_unique
+    # Step 2: Separate out the duplicated account numbers
+    duplicated_accounts = account_counts[account_counts > 1].index
+    df_duplicated = df[df['account_number'].isin(duplicated_accounts)]
+    
+    df_operation_time = df_duplicated.groupby('account_number').agg(
+        earliest_start_date=('license_term_start_date', 'min'),
+        latest_end_date=('license_term_expiration_date', 'max')
+    ).reset_index()
+    df_operation_time['operation_time'] = (df_operation_time['latest_end_date'] - df_operation_time['earliest_start_date']).dt.days
+    
+    df_non_duplicated = df_duplicated.drop_duplicates(subset='account_number', keep='first').copy()
+    df_merged_non_duplicated = pd.merge(
+        df_non_duplicated,
+        df_operation_time[['account_number', 'operation_time', 'earliest_start_date', 'latest_end_date']],
+        on='account_number',
+        how='left'
+    )
+    df_merged_non_duplicated['license_term_start_date'] = df_merged_non_duplicated['earliest_start_date']
+    df_merged_non_duplicated['license_term_expiration_date'] = df_merged_non_duplicated['latest_end_date']
+    
+    if (df_merged_non_duplicated['operation_time'] < 0).sum() < 0.05 * len(df_merged_non_duplicated):
+        df_merged_non_duplicated = df_merged_non_duplicated[df_merged_non_duplicated['operation_time'] >= 0]
+    else:
+        print('There is a large number of negative values in the operation_time column:')
+        print((df_merged_non_duplicated['operation_time'] < 0).sum())
+        print(0.05 * len(df_merged_non_duplicated))
+    
+    df_merged_non_duplicated['active_status'] = df_merged_non_duplicated['license_term_expiration_date'].apply(lambda x: 'Active' if x > today else 'Expired')
+    
+    df_merged_non_duplicated.drop(columns=['earliest_start_date', 'latest_end_date'], inplace=True)
+    
+    # Step 3: Concatenate the unique and non-duplicated dataframes
+    common_columns = df_unique.columns.intersection(df_merged_non_duplicated.columns)
+    
+    df_histogram_merged = pd.concat([df_unique[common_columns], df_merged_non_duplicated[common_columns]])
+    
+    return df_histogram_merged
     
 df_histogram = get_histogram() 
 
-fig = px.histogram(df_histogram, x='operation_time', color='active_status', nbins=20, title='Histogram of Operation Time for Unique Accounts')  
+fig = px.histogram(df_histogram, x='operation_time', color='active_status', nbins=30)
+fig.update_layout(
+    xaxis_title='Operation Time (days)',
+    yaxis_title='Count',
+    legend_title='License Status',
+    bargap=0.1
+)  
         
-
-    
-    
 # App layout and callback
 
 app.layout = html.Div([
