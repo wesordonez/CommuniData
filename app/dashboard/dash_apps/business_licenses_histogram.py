@@ -48,7 +48,7 @@ else:
     print(df['date_issued'].isnull().sum())
     print(0.05 * len(df))
     
-def get_histogram():
+def get_histogram(time_unit='Days'):
     
     # Step 1: Separate out the unique accounts
     account_counts = df['account_number'].value_counts()
@@ -101,46 +101,57 @@ def get_histogram():
     
     # Step 3: Concatenate the unique and non-duplicated dataframes
     common_columns = df_unique.columns.intersection(df_merged_non_duplicated.columns)
-    
     df_histogram_merged = pd.concat([df_unique[common_columns], df_merged_non_duplicated[common_columns]])
     
-    return df_histogram_merged
+    df_histogram_merged['operation_time_months'] = df_histogram_merged['operation_time'] / 30.44
+    df_histogram_merged['operation_time_years'] = df_histogram_merged['operation_time'] / 365.25
     
-df_histogram = get_histogram() 
+    if time_unit == 'Months':
+        df_histogram_merged['operation_time'] = df_histogram_merged['operation_time_months']
+        time_unit_label = 'Months'
+    elif time_unit == 'Years':
+        df_histogram_merged['operation_time'] = df_histogram_merged['operation_time_years']
+        time_unit_label = 'Years'
+    else:
+        time_unit_label = 'Days'
+    
+    return df_histogram_merged, time_unit_label
+    
+df_histogram, time_unit_label = get_histogram(time_unit='Days') 
 
-fig = px.histogram(df_histogram, x='operation_time', color='active_status', nbins=30)
-fig.update_layout(
-    xaxis_title='Operation Time (days)',
-    yaxis_title='Count',
-    legend_title='License Status',
-    bargap=0.1
-)  
+def plot_histogram(df_histogram, time_unit_label):
+    fig = px.histogram(df_histogram, x='operation_time', color='active_status', nbins=30)
+    fig.update_layout(
+        xaxis_title=f'Operation Time ({time_unit_label})',
+        yaxis_title='Count',
+        legend_title='License Status',
+        bargap=0.1
+    )  
+    return fig
+
+fig = plot_histogram(df_histogram, time_unit_label)
         
 # App layout and callback
 
 app.layout = html.Div([
-    dcc.Slider(
-        id='days-slider',
-        min=1,
-        max=60,
-        step=1,
-        value=30,
-        marks={i: str(i) for i in range(0, 61, 10)},
+    dcc.Dropdown(
+        ['Days', 'Months', 'Years'],
+        'Days',
+        id='time-unit',
     ),
+    html.Div(id='time-unit-output'),
     dcc.Graph(id='histogram', figure=fig)
 ])
 
-# @app.callback(
-#     Output('renewals-table', 'data'),
-#     Input('days-slider', 'value'),
-# )
-# def update_table(days):
-#     renewals_update = get_renewals_due(df, days)
-    
-#     if renewals_update.empty:
-#         return f"No renewals due within {days} days."
-    
-#     return renewals_update.to_dict('records')
+@app.callback(
+    Output('histogram', 'figure'),
+    Output('time-unit-output', 'children'),
+    Input('time-unit', 'value'),
+)
+def update_histogram(value):
+    histogram_update, time_unit_label = get_histogram(time_unit=value)
+    fig = plot_histogram(histogram_update, time_unit_label)
+    return fig, f''
     
 
 if __name__ == '__main__':
