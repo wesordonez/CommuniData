@@ -14,7 +14,7 @@ app = DjangoDash('BusinessLicensesHistogram')
 def get_data():
     db_url = f"postgresql://{os.environ.get('SQL_USER')}:{os.environ.get('SQL_PASSWORD')}@{os.environ.get('SQL_HOST')}:{os.environ.get('SQL_PORT')}/{os.environ.get('SQL_NAME')}"
     engine = create_engine(db_url)
-    query = "SELECT legal_name, doing_business_as_name, application_type, license_description, license_term_start_date, license_term_expiration_date FROM business_licenses_full"
+    query = "SELECT account_number, license_term_start_date, license_term_expiration_date, date_issued FROM business_licenses_full"
     df = pd.read_sql(query, engine)
     return df
 
@@ -25,6 +25,7 @@ df = get_data()
 
 df['license_term_start_date'] = pd.to_datetime(df['license_term_start_date'], errors='coerce')
 df['license_term_expiration_date'] = pd.to_datetime(df['license_term_expiration_date'], errors='coerce')
+df['date_issued'] = pd.to_datetime(df['date_issued'], errors='coerce')
 
 if df['license_term_start_date'].isnull().sum() < 0.05 * len(df):
     df.dropna(subset=['license_term_start_date'], inplace=True)
@@ -33,7 +34,6 @@ else:
     print(df['license_term_start_date'].isnull().sum())
     print(0.05 * len(df))
 
-
 if df['license_term_expiration_date'].isnull().sum() < 0.05 * len(df):
     df.dropna(subset=['license_term_expiration_date'], inplace=True)
 else:
@@ -41,30 +41,40 @@ else:
     print(df['license_term_expiration_date'].isnull().sum())
     print(0.05 * len(df))
     
-values_to_drop = ['c_loc', 'c_sba', 'c_expa', 'c_capa']
-
-df = df[~df['application_type'].isin(values_to_drop)]
+if df['date_issued'].isnull().sum() < 0.05 * len(df):
+    df.dropna(subset=['date_issued'], inplace=True)
+else:
+    print('There is a large number missing values in the date_issued column:')
+    print(df['date_issued'].isnull().sum())
+    print(0.05 * len(df))
     
-def get_renewals_due(df, days=30):
+# Step 1: Separate out the unique accounts
+def get_histogram():
+    account_counts = df['account_number'].value_counts()
+    unique_accounts = account_counts[account_counts == 1].index
+    df_unique = df[df['account_number'].isin(unique_accounts)]
+
     today = pd.Timestamp.today().normalize()
-    
-    df['days_until_expiration'] = (df['license_term_expiration_date'] - today).dt.days
-    
-    renewals_due = df[(df['days_until_expiration'] >= 0) & (df['days_until_expiration'] <= days)]
+
+    df_unique['active_status'] = df_unique['license_term_expiration_date'].apply(lambda x: 'Active' if x > today else 'Expired')
+    df_unique['operation_time'] = (df_unique['license_term_expiration_date'] - df_unique['license_term_start_date']).dt.days
+
+    if (df_unique['operation_time'] < 0).sum() < 0.05 * len(df_unique):
+        df_unique = df_unique[df_unique['operation_time'] >= 0]
+    else:
+        print('There is a large number of negative values in the operation_time column:')
+        print((df_unique['operation_time'] < 0).sum())
+        print(0.05 * len(df_unique))
         
-    if renewals_due.empty:
-        print(f"No renewals due within {days} days.")
-        renewals_due = df.sort_values('license_term_expiration_date', ascending=False).head(0)
-        return renewals_due
+    return df_unique
     
-    renewals_due = renewals_due.sort_values('days_until_expiration', ascending=False)
-    renewals_due['license_term_start_date'] = renewals_due['license_term_start_date'].dt.strftime('%Y-%m-%d')
-    renewals_due['license_term_expiration_date'] = renewals_due['license_term_expiration_date'].dt.strftime('%Y-%m-%d')
+df_histogram = get_histogram() 
+
+fig = px.histogram(df_histogram, x='operation_time', color='active_status', nbins=20, title='Histogram of Operation Time for Unique Accounts')  
+        
+
     
-    return renewals_due
-
-renewals_due = get_renewals_due(df)
-
+    
 # App layout and callback
 
 app.layout = html.Div([
@@ -76,35 +86,20 @@ app.layout = html.Div([
         value=30,
         marks={i: str(i) for i in range(0, 61, 10)},
     ),
-    html.Div(id='renewals-table-message', style={'color': 'red'}),
-    dash_table.DataTable(
-        id='renewals-table',
-        data=renewals_due.to_dict('records'),
-        columns=[
-            {'name': 'Legal Name', 'id': 'legal_name'},
-            {'name': 'Doing Business As Name', 'id': 'doing_business_as_name'},
-            {'name': 'Application Type', 'id': 'application_type'},
-            {'name': 'License Description', 'id': 'license_description'},
-            {'name': 'License Term Start Date', 'id': 'license_term_start_date'},
-            {'name': 'License Term Expiration Date', 'id': 'license_term_expiration_date'},
-            {'name': 'Days Until Expiration', 'id': 'days_until_expiration'},
-        ],
-        page_size=11,
-        style_header={'backgroundColor': 'rgb(230, 230, 230)', 'fontWeight': 'bold'},
-    ),
+    dcc.Graph(id='histogram', figure=fig)
 ])
 
-@app.callback(
-    Output('renewals-table', 'data'),
-    Input('days-slider', 'value'),
-)
-def update_table(days):
-    renewals_update = get_renewals_due(df, days)
+# @app.callback(
+#     Output('renewals-table', 'data'),
+#     Input('days-slider', 'value'),
+# )
+# def update_table(days):
+#     renewals_update = get_renewals_due(df, days)
     
-    if renewals_update.empty:
-        return f"No renewals due within {days} days."
+#     if renewals_update.empty:
+#         return f"No renewals due within {days} days."
     
-    return renewals_update.to_dict('records')
+#     return renewals_update.to_dict('records')
     
 
 if __name__ == '__main__':
