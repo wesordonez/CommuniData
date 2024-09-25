@@ -48,7 +48,7 @@ else:
     print(df['date_issued'].isnull().sum())
     print(0.05 * len(df))
     
-def get_histogram(time_unit='Days'):
+def get_table(time_unit='Days'):
     
     # Step 1: Separate out the unique accounts
     account_counts = df['account_number'].value_counts()
@@ -101,35 +101,29 @@ def get_histogram(time_unit='Days'):
     
     # Step 3: Concatenate the unique and non-duplicated dataframes
     common_columns = df_unique.columns.intersection(df_merged_non_duplicated.columns)
-    df_histogram_merged = pd.concat([df_unique[common_columns], df_merged_non_duplicated[common_columns]])
+    df_merged_final = pd.concat([df_unique[common_columns], df_merged_non_duplicated[common_columns]])
     
-    df_histogram_merged['operation_time_months'] = df_histogram_merged['operation_time'] / 30.44
-    df_histogram_merged['operation_time_years'] = df_histogram_merged['operation_time'] / 365.25
+    # Step 4: Group by license description and calculate the average operation time
+    
+    df_avg_operation_length = df_merged_final.groupby('license_description').agg(
+        avg_operation_time=('operation_time', 'mean')
+    ).reset_index()
+        
+    df_avg_operation_length['operation_time_months'] = df_avg_operation_length['avg_operation_time'] / 30.44
+    df_avg_operation_length['operation_time_years'] = df_avg_operation_length['avg_operation_time'] / 365.25
     
     if time_unit == 'Months':
-        df_histogram_merged['operation_time'] = df_histogram_merged['operation_time_months']
+        df_avg_operation_length['avg_operation_time'] = df_avg_operation_length['avg_operation_time_months']
         time_unit_label = 'Months'
     elif time_unit == 'Years':
-        df_histogram_merged['operation_time'] = df_histogram_merged['operation_time_years']
+        df_avg_operation_length['avg_operation_time'] = df_avg_operation_length['avg_operation_time_years']
         time_unit_label = 'Years'
     else:
         time_unit_label = 'Days'
     
-    return df_histogram_merged, time_unit_label
+    return df_avg_operation_length, time_unit_label
     
-df_histogram, time_unit_label = get_histogram(time_unit='Days') 
-
-def plot_histogram(df_histogram, time_unit_label):
-    fig = px.histogram(df_histogram, x='operation_time', color='active_status', nbins=30)
-    fig.update_layout(
-        xaxis_title=f'Operation Time ({time_unit_label})',
-        yaxis_title='Count',
-        legend_title='License Status',
-        bargap=0.1
-    )  
-    return fig
-
-fig = plot_histogram(df_histogram, time_unit_label)
+df_avg_operation_length, time_unit_label = get_table(time_unit='Days') 
         
 # App layout and callback
 
@@ -140,7 +134,14 @@ app.layout = html.Div([
         id='time-unit',
     ),
     html.Div(id='time-unit-output'),
-    dcc.Graph(id='histogram', figure=fig)
+    dash_table.DataTable(
+        id='avg-length-table',
+        data=df_avg_operation_length.to_dict('records'),
+        columns=[
+            {'name': 'License Description', 'id': 'license_description'},
+            {'name': 'Average Operation Time', 'id': 'avg_operation_time'},
+        ],
+    ),
 ])
 
 @app.callback(
@@ -148,10 +149,9 @@ app.layout = html.Div([
     Output('time-unit-output', 'children'),
     Input('time-unit', 'value'),
 )
-def update_histogram(value):
-    histogram_update, time_unit_label = get_histogram(time_unit=value)
-    fig = plot_histogram(histogram_update, time_unit_label)
-    return fig, f''
+def update_table(value):
+    table_update, time_unit_label = get_table(time_unit=value)
+    return table_update, f''
     
 
 if __name__ == '__main__':
