@@ -11,3 +11,4 @@ class DashboardConfig(AppConfig):
         import dashboard.dash_apps.business_licenses_distribution
         import dashboard.dash_apps.business_licenses_renewals
         import dashboard.dash_apps.business_licenses_histogram
+        import dashboard.dash_apps.business_licenses_avg_length
