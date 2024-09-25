@@ -108,10 +108,14 @@ def get_table(time_unit='Days'):
     df_avg_operation_length = df_merged_final.groupby('license_description').agg(
         avg_operation_time=('operation_time', 'mean')
     ).reset_index()
-        
-    df_avg_operation_length['operation_time_months'] = df_avg_operation_length['avg_operation_time'] / 30.44
-    df_avg_operation_length['operation_time_years'] = df_avg_operation_length['avg_operation_time'] / 365.25
     
+    df_avg_operation_length['avg_operation_time_months'] = df_avg_operation_length['avg_operation_time'] / 30.44
+    df_avg_operation_length['avg_operation_time_years'] = df_avg_operation_length['avg_operation_time'] / 365.25
+    
+    df_avg_operation_length['avg_operation_time'] = df_avg_operation_length['avg_operation_time'].round(2)
+    df_avg_operation_length['avg_operation_time_months'] = df_avg_operation_length['avg_operation_time_months'].round(2)
+    df_avg_operation_length['avg_operation_time_years'] = df_avg_operation_length['avg_operation_time_years'].round(2)
+        
     if time_unit == 'Months':
         df_avg_operation_length['avg_operation_time'] = df_avg_operation_length['avg_operation_time_months']
         time_unit_label = 'Months'
@@ -120,6 +124,8 @@ def get_table(time_unit='Days'):
         time_unit_label = 'Years'
     else:
         time_unit_label = 'Days'
+        
+    df_avg_operation_length = df_avg_operation_length.sort_values('avg_operation_time', ascending=False)
     
     return df_avg_operation_length, time_unit_label
     
@@ -141,17 +147,24 @@ app.layout = html.Div([
             {'name': 'License Description', 'id': 'license_description'},
             {'name': 'Average Operation Time', 'id': 'avg_operation_time'},
         ],
+        style_header={'backgroundColor': 'rgb(230, 230, 230)', 'fontWeight': 'bold'},
+        style_cell_conditional=[
+            {
+                'if': {'column_id': 'license_description'},
+                'textAlign': 'left'
+            }
+        ],
     ),
 ])
 
 @app.callback(
-    Output('histogram', 'figure'),
+    Output('avg-length-table', 'data'),
     Output('time-unit-output', 'children'),
     Input('time-unit', 'value'),
 )
 def update_table(value):
     table_update, time_unit_label = get_table(time_unit=value)
-    return table_update, f''
+    return table_update.to_dict('records') , f''
     
 
 if __name__ == '__main__':
