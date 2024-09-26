@@ -236,6 +236,12 @@ color: #637a92;
     color: #637a92;
     padding: 20px;
   }
+
+  .map-placeholder > div {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: visible !important;
+}
   
   .chart-card h3 {
     font-size: 1.2rem;
