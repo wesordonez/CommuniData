@@ -26,59 +26,24 @@ def get_data():
 # Get the data
 df = get_data()
 
-# Get the Chicago street map data
-shapefile_path = os.path.join(settings.MEDIA_ROOT, 'shapefiles', 'geo_export_bdc85215-02b6-4b86-96a5-1ee57873927b.shp')
-chicago_street_map = gpd.read_file(shapefile_path)
-
 # Data processing and science - Overlay the data on chicago map
 
-
-# test to display the map
-
-print(chicago_street_map.crs)
-
-# Ensure the shapefile is using lat/lon projection (EPSG:4326)
-if chicago_street_map.crs is None:
-    chicago_street_map = chicago_street_map.set_crs('EPSG:4326')
     
+# Display the map
     
-print(chicago_street_map['geometry'].isnull().sum())
-
-chicago_street_map = chicago_street_map[chicago_street_map['geometry'].notnull()]
-
-
-# chicago_street_map['coords'] = chicago_street_map['geometry'].apply(lambda x: x.representative_point().coords[:])
-
-chicago_street_map['coords'] = chicago_street_map['geometry'].apply(lambda x: list(x.coords))
-
-# Extract the centroids of polygons for lat/lon values
-# chicago_street_map['lon'] = chicago_street_map.geometry.centroid.x
-# chicago_street_map['lat'] = chicago_street_map.geometry.centroid.y
-
-# chicago_street_map = chicago_street_map.to_crs('EPSG:4326')
-
-
-fig = go.Figure()
-
-for coords in chicago_street_map['coords']:
-    lons, lats = zip(*coords)
-    fig.add_trace(go.Scattermap(
-        mode='lines',
-        lon=lons,
-        lat=lats,
-        line=dict(width=2),
-        name='Street Line'
-    ))
-
-
-
-# px.set_mapbox_access_token(open(".mapbox_token").read())
-# fig = px.scatter_map(chicago_street_map,
-#                      map_style='open-street-map',
-#                      title='Business Licenses in Chicago')
-
-
-        
+fig = px.scatter_mapbox(
+    df,
+    lat='latitude',
+    lon='longitude',
+    hover_name='legal_name',
+    hover_data=['doing_business_as_name', 'address', 'license_description', 'application_type', 'license_term_start_date', 'license_term_expiration_date', 'date_issued'],
+    title='Business Licenses in Chicago',
+    labels={'latitude': 'Latitude', 'longitude': 'Longitude'},
+    mapbox_style='carto-positron',
+    height=900,
+    width=900,
+    zoom=13
+)   
         
 # App layout and callback
 
