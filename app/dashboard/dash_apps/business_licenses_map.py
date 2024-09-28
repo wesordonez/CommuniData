@@ -26,6 +26,7 @@ def get_data():
 # Get the data
 df = get_data()
 
+print(df.columns)
 # Data processing and science - Overlay the data on chicago map
 
     
@@ -36,14 +37,31 @@ fig = px.scatter_mapbox(
     lat='latitude',
     lon='longitude',
     hover_name='legal_name',
-    hover_data=['doing_business_as_name', 'address', 'license_description', 'application_type', 'license_term_start_date', 'license_term_expiration_date', 'date_issued'],
-    title='Business Licenses in Chicago',
-    labels={'latitude': 'Latitude', 'longitude': 'Longitude'},
+    hover_data=['doing_business_as_name', 'address', 'license_description', 'license_term_expiration_date'],
+    labels={'doing_business_as_name': 'Doing Business As', 'address': 'Address', 'license_description': 'License Description', 'license_term_expiration_date': 'License Term Expiration Date'},
     mapbox_style='carto-positron',
-    height=900,
-    width=900,
-    zoom=13
+    height=950,
+    zoom=13,
+    color='application_type',
 )   
+
+# heat map requires a "z" value, which is the intensity of the heat. this would be a count of businesses in a given area
+
+# fig = px.density_map(
+#     df,
+#     lat='latitude',
+#     lon='longitude',
+#     hover_name='legal_name',
+#     hover_data=['doing_business_as_name', 'address', 'license_description', 'application_type', 'license_term_start_date', 'license_term_expiration_date', 'date_issued'],
+#     title='Business Licenses in Chicago',
+#     labels={'latitude': 'Latitude', 'longitude': 'Longitude'},
+#     mapbox_style='carto-positron',
+#     height=900,
+#     width=900,
+#     zoom=13,
+# )   
+
+fig.update_traces(marker=dict(size=15), cluster=dict(enabled=True, step=10))
         
 # App layout and callback
 
