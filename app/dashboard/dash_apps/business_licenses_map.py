@@ -31,19 +31,36 @@ print(df.columns)
 
     
 # Display the map
+
+def create_map(cluster_enabled='enabled'):
     
-fig = px.scatter_mapbox(
-    df,
-    lat='latitude',
-    lon='longitude',
-    hover_name='legal_name',
-    hover_data=['doing_business_as_name', 'address', 'license_description', 'license_term_expiration_date'],
-    labels={'doing_business_as_name': 'Doing Business As', 'address': 'Address', 'license_description': 'License Description', 'license_term_expiration_date': 'License Term Expiration Date'},
-    mapbox_style='carto-positron',
-    height=950,
-    zoom=13,
-    color='application_type',
-)   
+    print(f"Creating map with clustering: {cluster_enabled}")  # Debugging print statement
+
+    
+    fig = px.scatter_mapbox(
+        df,
+        lat='latitude',
+        lon='longitude',
+        hover_name='legal_name',
+        hover_data=['doing_business_as_name', 'address', 'license_description', 'license_term_expiration_date'],
+        labels={'doing_business_as_name': 'Doing Business As', 'address': 'Address', 'license_description': 'License Description', 'license_term_expiration_date': 'License Term Expiration Date'},
+        mapbox_style='carto-positron',
+        height=950,
+        zoom=13,
+        # color='application_type',
+    )   
+    
+    if cluster_enabled == 'enabled':
+        fig.update_traces(marker=dict(size=15), cluster=dict(enabled=True, step=10, maxzoom=15))
+        print(f"Updated map with clustering: {cluster_enabled} should be on")  # Debugging print statement
+
+    else:
+        fig.update_traces(marker=dict(size=15), cluster=dict(enabled=False, maxzoom=1))
+        print(f"Updated map with clustering: {cluster_enabled} should be off")  # Debugging print statement
+
+        
+    return fig
+
 
 # heat map requires a "z" value, which is the intensity of the heat. this would be a count of businesses in a given area
 
@@ -61,22 +78,31 @@ fig = px.scatter_mapbox(
 #     zoom=13,
 # )   
 
-fig.update_traces(marker=dict(size=15), cluster=dict(enabled=True, step=10))
+# fig.update_traces(marker=dict(size=15), cluster=dict(enabled=True, step=10))
         
 # App layout and callback
 
 app.layout = html.Div([
-    dcc.Graph(id='map', figure=fig)
+    dcc.RadioItems(
+        id='cluster-toggle',
+        options=[
+            {'label': 'Enable Clustering', 'value': '15'},
+            {'label': 'Disable Clustering', 'value': '1'},
+        ],
+        value='enabled',
+        labelStyle={'display': 'inline-block'}
+    ),
+    dcc.Graph(id='map', figure=create_map(cluster_enabled='enabled'))
 ])
 
-# @app.callback(
-#     Output('avg-length-table', 'data'),
-#     Output('time-unit-output', 'children'),
-#     Input('time-unit', 'value'),
-# )
-# def update_table(value):
-#     table_update, time_unit_label = get_table(time_unit=value)
-#     return table_update.to_dict('records') , f''
+@app.callback(
+    Output('map', 'figure'),
+    Input('cluster-toggle', 'value'),
+)
+def update_map(value):
+    fig = create_map(value)
+
+    return fig
     
 
 if __name__ == '__main__':
