@@ -32,31 +32,40 @@ print(df.columns)
     
 # Display the map
 
-def create_map(cluster_enabled='enabled'):
+def create_map(cluster_enabled='enabled', color='color'):
     
-    print(f"Creating map with clustering: {cluster_enabled}")  # Debugging print statement
-
-    
-    fig = px.scatter_mapbox(
-        df,
-        lat='latitude',
-        lon='longitude',
-        hover_name='legal_name',
-        hover_data=['doing_business_as_name', 'address', 'license_description', 'license_term_expiration_date'],
-        labels={'doing_business_as_name': 'Doing Business As', 'address': 'Address', 'license_description': 'License Description', 'license_term_expiration_date': 'License Term Expiration Date'},
-        mapbox_style='carto-positron',
-        height=950,
-        zoom=13,
-        # color='application_type',
-    )   
+    if color == 'color':
+        fig = px.scatter_mapbox(
+            df,
+            lat='latitude',
+            lon='longitude',
+            hover_name='legal_name',
+            hover_data=['doing_business_as_name', 'address', 'license_description', 'license_term_expiration_date'],
+            labels={'doing_business_as_name': 'Doing Business As', 'address': 'Address', 'license_description': 'License Description', 'license_term_expiration_date': 'License Term Expiration Date'},
+            mapbox_style='carto-positron',
+            height=950,
+            zoom=13,
+            color='application_type',
+        )   
+    else:
+        fig = px.scatter_mapbox(
+            df,
+            lat='latitude',
+            lon='longitude',
+            hover_name='legal_name',
+            hover_data=['doing_business_as_name', 'address', 'license_description', 'license_term_expiration_date'],
+            labels={'doing_business_as_name': 'Doing Business As', 'address': 'Address', 'license_description': 'License Description', 'license_term_expiration_date': 'License Term Expiration Date'},
+            mapbox_style='carto-positron',
+            height=950,
+            zoom=13,
+            # color='application_type',
+        )   
     
     if cluster_enabled == 'enabled':
         fig.update_traces(marker=dict(size=15), cluster=dict(enabled=True, step=10, maxzoom=15))
-        print(f"Updated map with clustering: {cluster_enabled} should be on")  # Debugging print statement
 
     else:
         fig.update_traces(marker=dict(size=15), cluster=dict(enabled=False, maxzoom=1))
-        print(f"Updated map with clustering: {cluster_enabled} should be off")  # Debugging print statement
 
         
     return fig
@@ -78,7 +87,6 @@ def create_map(cluster_enabled='enabled'):
 #     zoom=13,
 # )   
 
-# fig.update_traces(marker=dict(size=15), cluster=dict(enabled=True, step=10))
         
 # App layout and callback
 
@@ -86,10 +94,19 @@ app.layout = html.Div([
     dcc.RadioItems(
         id='cluster-toggle',
         options=[
-            {'label': 'Enable Clustering', 'value': '15'},
-            {'label': 'Disable Clustering', 'value': '1'},
+            {'label': 'Enable Clustering', 'value': 'enabled'},
+            {'label': 'Disable Clustering', 'value': 'disabled'},
         ],
         value='enabled',
+        labelStyle={'display': 'inline-block'}
+    ),
+    dcc.RadioItems(
+        id='color-toggle',
+        options=[
+            {'label': 'Color by Application Type', 'value': 'color'},
+            {'label': 'No Color Separation', 'value': 'no_color'},
+        ],
+        value='scatter',
         labelStyle={'display': 'inline-block'}
     ),
     dcc.Graph(id='map', figure=create_map(cluster_enabled='enabled'))
@@ -98,9 +115,10 @@ app.layout = html.Div([
 @app.callback(
     Output('map', 'figure'),
     Input('cluster-toggle', 'value'),
+    Input('color-toggle', 'value')
 )
-def update_map(value):
-    fig = create_map(value)
+def update_map(value, color):
+    fig = create_map(value, color)
 
     return fig
     
