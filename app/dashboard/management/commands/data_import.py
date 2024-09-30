@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from dashboard.models import BusinessLicenses
 import pandas as pd
 
-file_path = '../business_licenses_test.csv'
+file_path = '../business_licenses_26ward.csv'
 
 
 # Read csv file and set encoding to utf-8

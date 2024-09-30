@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
+from django.middleware.security import SecurityMiddleware
 import os
 from dotenv import load_dotenv
 dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
@@ -51,6 +52,8 @@ INSTALLED_APPS = [
     'reports.apps.ReportsConfig',
     'crispy_forms',
     'crispy_bootstrap5',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -149,6 +152,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR / 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / "home/static",
+    BASE_DIR / "dashboard/static",
 ]
 
 # Default primary key field type
@@ -164,3 +168,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 # Login Redirect
 
 LOGIN_REDIRECT_URL = 'dashboard'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# Media Files
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

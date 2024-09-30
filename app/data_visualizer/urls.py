@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django_plotly_dash.views import add_to_session
 
 
 urlpatterns = [
@@ -23,4 +24,5 @@ urlpatterns = [
     path('', include("home.urls")),
     path('dashboard/', include("dashboard.urls")),
     path('session/', include("session.urls")),
+    path('django_plotly_dash/', include('django_plotly_dash.urls')),
 ]
