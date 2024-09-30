@@ -12,7 +12,10 @@ app = DjangoDash('BusinessLicensesAvgLength')
 
 # Connect to the database
 def get_data():
-    db_url = f"postgresql://{os.environ.get('SQL_USER')}:{os.environ.get('SQL_PASSWORD')}@{os.environ.get('SQL_HOST')}:{os.environ.get('SQL_PORT')}/{os.environ.get('SQL_NAME')}"
+    if os.environ.get('DJANGO_ENV') == 'development':
+        db_url = f"postgresql://{os.environ.get('SQL_USER')}:{os.environ.get('SQL_PASSWORD')}@{os.environ.get('SQL_HOST')}:{os.environ.get('SQL_PORT')}/{os.environ.get('SQL_NAME')}"
+    else:
+        db_url = f"postgresql://{os.environ.get('PRD_SQL_USER')}:{os.environ.get('PRD_SQL_PASSWORD')}@{os.environ.get('PRD_SQL_HOST')}:{os.environ.get('PRD_SQL_PORT')}/{os.environ.get('PRD_SQL_NAME')}"
     engine = create_engine(db_url)
     query = "SELECT account_number, license_term_start_date, license_term_expiration_date, date_issued, license_description FROM business_licenses_full"
     
