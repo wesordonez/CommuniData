@@ -91,28 +91,30 @@ WSGI_APPLICATION = 'data_visualizer.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if os.getenv('DJANGO_ENV') == 'production':
-    DATABASES = {
-        'default': {
-            'ENGINE': os.environ.get('PRD_SQL_ENGINE'),
-            'NAME': os.environ.get('PRD_SQL_NAME'),
-            'USER': os.environ.get('PRD_SQL_USER'),
-            'PASSWORD': os.environ.get('PRD_SQL_PASSWORD'),
-            'HOST': os.environ.get('PRD_SQL_HOST'),
-            'PORT': os.environ.get('PRD_SQL_PORT')
-        }
-    }
-else:
-    DATABASES = {
+if not os.getenv('COLLECTSTATIC'):
+
+    if os.getenv('DJANGO_ENV') == 'production':
+        DATABASES = {
             'default': {
-                'ENGINE': os.environ.get('SQL_ENGINE'),
-                'NAME': os.environ.get('SQL_NAME'),
-                'USER': os.environ.get('SQL_USER'),
-                'PASSWORD': os.environ.get('SQL_PASSWORD'),
-                'HOST': os.environ.get('SQL_HOST'),
-                'PORT': os.environ.get('SQL_PORT')
+                'ENGINE': os.environ.get('PRD_SQL_ENGINE'),
+                'NAME': os.environ.get('PRD_SQL_NAME'),
+                'USER': os.environ.get('PRD_SQL_USER'),
+                'PASSWORD': os.environ.get('PRD_SQL_PASSWORD'),
+                'HOST': os.environ.get('PRD_SQL_HOST'),
+                'PORT': os.environ.get('PRD_SQL_PORT')
             }
         }
+    else:
+        DATABASES = {
+                'default': {
+                    'ENGINE': os.environ.get('SQL_ENGINE'),
+                    'NAME': os.environ.get('SQL_NAME'),
+                    'USER': os.environ.get('SQL_USER'),
+                    'PASSWORD': os.environ.get('SQL_PASSWORD'),
+                    'HOST': os.environ.get('SQL_HOST'),
+                    'PORT': os.environ.get('SQL_PORT')
+                }
+            }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
