@@ -26,26 +26,27 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-     <aside class="sidebar" id="sidebar">
-        <div class="logo">
-            <img src="{% static 'dashboard/img/CD_Logo.jpeg' %}" alt="CommuniData Logo" width="50" height="50">
-        </div>
-        <nav class="nav-links">
-            <a href="#"><i class="fas fa-tachometer-alt"></i><span class="link-text">Dashboard</span></a>
-            <a href="#"><i class="fas fa-user-graduate"></i><span class="link-text">Advising</span></a>
-            <a href="#"><i class="fas fa-user-tie"></i><span class="link-text">Consultants</span></a>
-            <a href="#"><i class="fas fa-briefcase"></i><span class="link-text">Programs</span></a>
-            <a href="#"><i class="fas fa-users"></i><span class="link-text">Clients</span></a>
-            <a href="#"><i class="fas fa-building"></i><span class="link-text">Businesses</span></a>
-        </nav>
-        <div class="collapse-arrow" id="collapse-arrow">
-            <i class="fas fa-chevron-left"></i>
-        </div>
-      </aside>
+    <div class="sidebar-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <img src="{% static 'dashboard/img/CD_Logo.jpeg' %}" alt="CommuniData Logo" width="50" height="50">
+            </div>
+            <nav class="nav-links">
+                <a href="#"><i class="fas fa-tachometer-alt"></i><span class="link-text">Dashboard</span></a>
+                <a href="#"><i class="fas fa-user-graduate"></i><span class="link-text">Advising</span></a>
+                <a href="#"><i class="fas fa-user-tie"></i><span class="link-text">Consultants</span></a>
+                <a href="#"><i class="fas fa-briefcase"></i><span class="link-text">Programs</span></a>
+                <a href="#"><i class="fas fa-users"></i><span class="link-text">Clients</span></a>
+                <a href="#"><i class="fas fa-building"></i><span class="link-text">Businesses</span></a>
+            </nav>
+            <div class="collapse-arrow" id="collapse-arrow">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+        </aside>
+    </div>
 
     <!-- Dashboard Content -->
-     <div class="dashboard-content">
-
+    <div class="dashboard-content">
         <!-- Top Bar -->
         <header class="top-bar">
             <main>
@@ -67,45 +68,45 @@
                 </div>
             </div>
         </header>
-    
+
         <!-- Dashboard Cards -->
         <section class="cards-container">
             <!-- Info Cards -->
             <div class="card">
-            <h3>New Businesses in [MONTH]</h3>
-            <p>Placeholder for data</p>
+                <h3>New Businesses in [MONTH]</h3>
+                <p>Placeholder for data</p>
             </div>
             <div class="card">
-            <h3>Active Clients</h3>
-            <p>Placeholder for data</p>
+                <h3>Active Clients</h3>
+                <p>Placeholder for data</p>
             </div>
             <div class="card">
-            <h3>Available Commercial Inventory</h3>
-            <p>Placeholder for data</p>
+                <h3>Available Commercial Inventory</h3>
+                <p>Placeholder for data</p>
             </div>
             <div class="card">
-            <h3>Average Advising Session Duration</h3>
-            <p>Placeholder for data</p>
+                <h3>Average Advising Session Duration</h3>
+                <p>Placeholder for data</p>
             </div>
-    
+
             <!-- Chart Placeholders -->
             <div class="chart-card">
-            <h3>New Businesses Licenses by Month in Humboldt Park</h3>
-            <div class="chart-placeholder">
-                {% plotly_app 'BusinessLicensesMonthly' %}
-            </div>
+                <h3>New Businesses Licenses by Month in Humboldt Park</h3>
+                <div class="chart-placeholder">
+                    {% plotly_app 'BusinessLicensesMonthly' %}
+                </div>
             </div>
             <div class="chart-card">
-            <h3>Business Type Distribution by Year</h3>
-            <div class="chart-placeholder">
-                {% plotly_app 'BusinessLicensesDistribution' %}
-            </div>
+                <h3>Business Type Distribution by Year</h3>
+                <div class="chart-placeholder">
+                    {% plotly_app 'BusinessLicensesDistribution' %}
+                </div>
             </div>
             <div class="chart-card table-card">
-            <h3>Upcoming Business License Expirations</h3>
-            <div class="chart-placeholder">
-                {% plotly_app 'BusinessLicensesRenewals' %}
-            </div>
+                <h3>Upcoming Business License Expirations</h3>
+                <div class="chart-placeholder">
+                    {% plotly_app 'BusinessLicensesRenewals' %}
+                </div>
             </div>
             <div class="chart-card">
                 <h3>Histogram of Business License Duration</h3>
@@ -126,7 +127,7 @@
                 </div>
             </div>
         </section>
-        </div>
+    </div>
 <!-- Bootstrap JS CDN -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script type="text/javascript" src="{% static 'dashboard/js/dashboard.js' %}"></script>
