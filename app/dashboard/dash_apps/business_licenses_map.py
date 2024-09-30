@@ -26,13 +26,34 @@ def get_data():
 # Get the data
 df = get_data()
 
-print(df.columns)
 # Data processing and science - Overlay the data on chicago map
 
+df['date_issued'] = pd.to_datetime(df['date_issued'], errors='coerce')
+if df['date_issued'].isnull().any():
+    print('There are missing values in the date_issued column')
+df['license_term_start_date'] = pd.to_datetime(df['license_term_start_date'], errors='coerce')
+if df['license_term_start_date'].isnull().any():
+    print('There are missing values in the license_term_start_date column')
+df['license_term_expiration_date'] = pd.to_datetime(df['license_term_expiration_date'], errors='coerce')
+if df['license_term_expiration_date'].isnull().any():
+    print('There are missing values in the license_term_expiration_date column')
+    
+def get_distribution_by_year(df, threshold=0.05):
+
+    df_distribution = df['license_description'].value_counts(normalize=True).reset_index()
+    df_distribution.columns = ['license_description', 'proportion']
+
+    categories_to_group = df_distribution['license_description'][df_distribution['proportion'] < threshold].unique()
+
+    df['grouped_category'] = df['license_description'].apply(lambda x: 'Other' if x in categories_to_group else x)
+
+    return df
+
+df = get_distribution_by_year(df)
     
 # Display the map
 
-def create_map(cluster_enabled='enabled', color='color'):
+def create_map(df, cluster_enabled='enabled', color='color'):
     
     if color == 'color':
         fig = px.scatter_mapbox(
@@ -45,7 +66,7 @@ def create_map(cluster_enabled='enabled', color='color'):
             mapbox_style='carto-positron',
             height=950,
             zoom=13,
-            color='application_type',
+            color='grouped_category',
         )   
     else:
         fig = px.scatter_mapbox(
@@ -70,23 +91,7 @@ def create_map(cluster_enabled='enabled', color='color'):
         
     return fig
 
-
-# heat map requires a "z" value, which is the intensity of the heat. this would be a count of businesses in a given area
-
-# fig = px.density_map(
-#     df,
-#     lat='latitude',
-#     lon='longitude',
-#     hover_name='legal_name',
-#     hover_data=['doing_business_as_name', 'address', 'license_description', 'application_type', 'license_term_start_date', 'license_term_expiration_date', 'date_issued'],
-#     title='Business Licenses in Chicago',
-#     labels={'latitude': 'Latitude', 'longitude': 'Longitude'},
-#     mapbox_style='carto-positron',
-#     height=900,
-#     width=900,
-#     zoom=13,
-# )   
-
+fig = create_map(df)
         
 # App layout and callback
 
@@ -109,18 +114,30 @@ app.layout = html.Div([
         value='scatter',
         labelStyle={'display': 'inline-block'}
     ),
-    dcc.Graph(id='map', figure=create_map(cluster_enabled='enabled'))
+    dcc.Slider(
+        id='threshold-slider',
+        min=1,
+        max=10,
+        step=1,
+        value=5,
+        marks={i: f'{i}%' for i in range(1, 11)}
+    ),
+    dcc.Graph(id='map', figure='fig')
 ])
 
 @app.callback(
     Output('map', 'figure'),
     Input('cluster-toggle', 'value'),
-    Input('color-toggle', 'value')
-)
-def update_map(value, color):
-    fig = create_map(value, color)
+    Input('color-toggle', 'value'),
+    Input('threshold-slider', 'value'),
 
-    return fig
+)
+def update_map(value, color, threshold):
+    updated_df = get_distribution_by_year(df, threshold/100)
+
+    updated_fig = create_map(updated_df,value, color)
+
+    return updated_fig
     
 
 if __name__ == '__main__':
