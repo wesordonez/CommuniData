@@ -11,3 +11,5 @@ gunicorn==20.1.0
 whitenoise==5.2.0
 shapely==2.0.6
 geopandas==1.0.1
+django-plotly-dash==2.3.1
+plotly==5.24.1
