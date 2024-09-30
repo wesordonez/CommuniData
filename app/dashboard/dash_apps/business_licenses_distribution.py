@@ -15,8 +15,8 @@ def get_data():
     db_url = f"postgresql://{os.environ.get('SQL_USER')}:{os.environ.get('SQL_PASSWORD')}@{os.environ.get('SQL_HOST')}:{os.environ.get('SQL_PORT')}/{os.environ.get('SQL_NAME')}"
     engine = create_engine(db_url)
     query = "SELECT date_issued, license_description FROM business_licenses_full"
-    df = pd.read_sql(query, engine)
-    return df
+    
+    return pd.read_sql(query, engine)
 
 # Get the data
 df = get_data()
