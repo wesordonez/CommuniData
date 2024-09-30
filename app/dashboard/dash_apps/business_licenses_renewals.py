@@ -1,11 +1,9 @@
 import dash
 from dash import dcc, html, Input, Output, callback, dash_table
-import plotly.express as px
 from django_plotly_dash import DjangoDash
 import pandas as pd
 from sqlalchemy import create_engine
 import os
-import calendar
 
 # Create a new Dash app
 app = DjangoDash('BusinessLicensesRenewals')
