@@ -54,8 +54,7 @@ def get_renewals_due(df, days=30):
         
     if renewals_due.empty:
         print(f"No renewals due within {days} days.")
-        renewals_due = df.sort_values('license_term_expiration_date', ascending=False).head(0)
-        return renewals_due
+        return df.sort_values('license_term_expiration_date', ascending=False).head(0)
     
     renewals_due = renewals_due.sort_values('days_until_expiration', ascending=False)
     renewals_due['license_term_start_date'] = renewals_due['license_term_start_date'].dt.strftime('%Y-%m-%d')
