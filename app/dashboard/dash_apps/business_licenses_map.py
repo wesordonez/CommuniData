@@ -38,7 +38,7 @@ df['license_term_expiration_date'] = pd.to_datetime(df['license_term_expiration_
 if df['license_term_expiration_date'].isnull().any():
     print('There are missing values in the license_term_expiration_date column')
     
-def get_distribution_by_year(df, threshold=0.03):
+def get_distribution(df, threshold=0.03):
 
     df_distribution = df['license_description'].value_counts(normalize=True).reset_index()
     df_distribution.columns = ['license_description', 'proportion']
@@ -49,7 +49,7 @@ def get_distribution_by_year(df, threshold=0.03):
 
     return df
 
-df = get_distribution_by_year(df)
+df = get_distribution(df)
     
 # Display the map
 
@@ -149,7 +149,7 @@ def update_map(value, color, threshold, start_date, end_date):
     
     filtered_df = df[(df['license_term_start_date'] >= start_date) & (df['license_term_start_date'] <= end_date)]
     
-    updated_df = get_distribution_by_year(filtered_df, threshold/100)
+    updated_df = get_distribution(filtered_df, threshold/100)
 
     updated_fig = create_map(updated_df,value, color)
 

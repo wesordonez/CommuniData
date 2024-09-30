@@ -30,7 +30,6 @@ const today = formatDate(date);
 document.getElementById('current-date').textContent = today;
 
 // Get user info
-
 function getUserInfo() {
     const userName = document.getElementById('user-name');
     const userRole = document.getElementById('user-role');
