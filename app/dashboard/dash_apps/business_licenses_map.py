@@ -38,7 +38,7 @@ df['license_term_expiration_date'] = pd.to_datetime(df['license_term_expiration_
 if df['license_term_expiration_date'].isnull().any():
     print('There are missing values in the license_term_expiration_date column')
     
-def get_distribution_by_year(df, threshold=0.05):
+def get_distribution_by_year(df, threshold=0.03):
 
     df_distribution = df['license_description'].value_counts(normalize=True).reset_index()
     df_distribution.columns = ['license_description', 'proportion']
@@ -122,18 +122,34 @@ app.layout = html.Div([
         value=5,
         marks={i: f'{i}%' for i in range(1, 11)}
     ),
-    dcc.Graph(id='map', figure='fig')
+    dcc.DatePickerRange(
+        id='date-picker-range',
+        min_date_allowed=df['date_issued'].min(),
+        max_date_allowed=df['date_issued'].max(),
+        end_date=df['date_issued'].max(),
+        display_format='YYYY-MM-DD',
+    ),
+    html.Div(id='output-container-date-picker-range'),
+    dcc.Graph(id='map', figure=fig)
 ])
 
 @app.callback(
     Output('map', 'figure'),
+    # Output('output-container-date-picker-range', 'children'),
     Input('cluster-toggle', 'value'),
     Input('color-toggle', 'value'),
     Input('threshold-slider', 'value'),
-
+    Input('date-picker-range', 'start_date'),
+    Input('date-picker-range', 'end_date'),
 )
-def update_map(value, color, threshold):
-    updated_df = get_distribution_by_year(df, threshold/100)
+
+def update_map(value, color, threshold, start_date, end_date):
+    if start_date is None or end_date is None:
+        return dash.no_update
+    
+    filtered_df = df[(df['license_term_start_date'] >= start_date) & (df['license_term_start_date'] <= end_date)]
+    
+    updated_df = get_distribution_by_year(filtered_df, threshold/100)
 
     updated_fig = create_map(updated_df,value, color)
 
