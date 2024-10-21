@@ -29,7 +29,7 @@
 
     <!-- Navbar/Header -->
     <header class="site-header">
-        <nav class="navbar navbar-expand-md bg-steel fixed-top navbar-container">
+        <nav class="navbar navbar-expand-md bg-steel navbar-container">
                 <a class="navbar-brand mr-4" href="{% url 'home' %}"><img class="logo" src="{% static 'home/img/CD_Logo.jpeg' %}" alt="CommuniData Logo"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon">
@@ -40,19 +40,19 @@
                     <div class="d-flex w-100">
                     <!-- Navbar Left Side -->
                         <div class="navbar-nav mr-auto align-items-center">
-                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#section1">
+                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#reviews-section">
                                 <i class="fa-solid fa-star star-indicator"></i>
-                                What are they saying?
-                                <i class="fa-solid fa-star star-indicator"></i>
-                            </a>
-                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#section2">
-                                <i class="fa-solid fa-star star-indicator"></i>
-                                How's it work?
+                                Reviews
                                 <i class="fa-solid fa-star star-indicator"></i>
                             </a>
-                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#section3">
+                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#features-section">
                                 <i class="fa-solid fa-star star-indicator"></i>
-                                Who are we?
+                                Features
+                                <i class="fa-solid fa-star star-indicator"></i>
+                            </a>
+                            <a class="nav-item nav-link header-link" href="{% url 'home' %}#contact-section">
+                                <i class="fa-solid fa-star star-indicator"></i>
+                                Contact Us
                                 <i class="fa-solid fa-star star-indicator"></i>
                             </a>
                         </div>
@@ -95,8 +95,8 @@
 
     <!-- Reviews and Partners Section -->
 
-    <section class="collapsible-section">
-        <button class="collapsible-button">What are they saying?</button>
+    <section class="collapsible-section" id="reviews-section">
+        <button class="collapsible-button active">What are they saying?</button>
         <div class="content">
             <div class="reviews">
                 <!-- Insert review content here -->
@@ -156,7 +156,7 @@
 
     <!-- How it Works Section -->
 
-    <section class="features-section">
+    <section class="features-section" id="features-section">
         <div class="features">
             <!-- Feature Row 1 -->
             <div class="feature-row">
@@ -219,7 +219,7 @@
       
     <!-- Final CTA and Contact Form Section -->
 
-    <section class="cta-section">
+    <section class="cta-section" id="contact-section">
         <h2>Are you ready to unlock your community's full potential?</h2>
         <a href="{% url 'payments' %}" class="btn btn-primary cta-button">Get started now!</a>
         <p class="intro-text">Still got questions? Let's work together to make your community thrive!</p>

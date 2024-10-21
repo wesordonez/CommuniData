@@ -9,7 +9,6 @@
 body {
     background: #fafafa;
     color: #333333;
-    padding-top: 180px;
     font-family: Raleway, sans-serif;
   }
   
@@ -230,14 +229,14 @@ img {
   margin-bottom: 0;
 }
 
-.active, .collapsible-button:hover {
-  background-color: #003d82;
+.active .collapsible-button {
+  border-radius: 20px; 
 }
 
 .content {
   padding: 30px;
   border-radius: 45px;
-  display: none;
+  display: block;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
   background-color: #083D77;
