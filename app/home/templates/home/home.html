@@ -29,11 +29,12 @@
 
     <!-- Navbar/Header -->
     <header class="site-header">
-        <nav class="navbar navbar-expand-md bg-steel fixed-top">
-            <div class="container navbar-container">
+        <nav class="navbar navbar-expand-md bg-steel fixed-top navbar-container">
                 <a class="navbar-brand mr-4" href="{% url 'home' %}"><img class="logo" src="{% static 'home/img/CD_Logo.jpeg' %}" alt="CommuniData Logo"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon">
+                        <i class="fa fa-bars"></i>
+                    </span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
                     <div class="d-flex w-100">
@@ -63,7 +64,6 @@
                         <i class="fa-solid fa-star login-star-indicator"></i>
                     </div>
                 </div>
-            </div>
         </nav>
     </header>
 

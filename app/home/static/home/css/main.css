@@ -82,14 +82,21 @@ body {
 
 .site-header {
     background-color: #B3DDF2;
+    width: 100%;
 }
 .navbar-container {
-    padding: 10px;
-    margin: auto 10px;
+  padding: 0 20px;
+  margin: auto;
 }
+
+.navbar-toggler {
+  color: black;
+}
+
 img {
   width: 120px; 
   height: auto; 
+  border-radius: 20px;
 }
 .header-link {
   color: #083D77;
@@ -100,10 +107,12 @@ img {
 .header-link:hover .star-indicator {
   color: #FF4747;
   display: inline-block;
+  transition: color 0.3s ease-in-out;
 }
 
 .header-link .star-indicator {
   display: none;
+  transition: color 0.3s ease-in-out;
 }
 
 .login-star-indicator {
