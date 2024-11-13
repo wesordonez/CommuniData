@@ -229,14 +229,14 @@ img {
   margin-bottom: 0;
 }
 
-.active .collapsible-button {
-  border-radius: 20px; 
+.collapsible-section .collapsible-button.active {
+  border-radius: 20px;
 }
 
 .content {
   padding: 30px;
   border-radius: 45px;
-  display: block;
+  display: none;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
   background-color: #083D77;
